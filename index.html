@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>かな - Learn Japanese from Zero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+TC:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root, [data-theme="dark"] {
+  --bg: #0e0e0f; --bg2: #161618; --bg3: #1e1e21; --bg4: #27272b;
+  --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
+  --text: #f0ede8; --text2: #9e9b96; --text3: #5c5a56;
+  --red: #e5534b; --red-light: rgba(229,83,75,0.12);
+  --green: #3fb950; --green-bg: rgba(63,185,80,0.12);
+  --yellow: #d29922; --yellow-bg: rgba(210,153,34,0.12);
+  --blue: #4a90e2; --blue-bg: rgba(74,144,226,0.1);
+}
+[data-theme="light"] {
+  --bg: #fafaf8; --bg2: #ffffff; --bg3: #f1f0ed; --bg4: #e5e4e0;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
+  --text: #1a1a1d; --text2: #5a5a5a; --text3: #9a9a9a;
+  --red: #c0392b; --red-light: rgba(192,57,43,0.08);
+  --green: #2d7a3e; --green-bg: rgba(45,122,62,0.1);
+  --yellow: #a87413; --yellow-bg: rgba(168,116,19,0.1);
+  --blue: #2c6cb0; --blue-bg: rgba(44,108,176,0.1);
+}
+:root {
+  --serif: 'Noto Serif JP', 'Noto Sans TC', serif;
+  --sans: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-size: 15px; line-height: 1.6;
+  min-height: 100vh; -webkit-font-smoothing: antialiased;
+  transition: background 0.25s, color 0.25s;
+}
+body[data-lang="zh"] { font-family: 'Noto Sans TC', 'Inter', system-ui, sans-serif; }
+button { font-family: inherit; }
+.app { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 230px; flex-shrink: 0; background: var(--bg2); border-right: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; bottom: 0; display: flex; flex-direction: column; z-index: 50;
+}
+.logo { padding: 1.5rem 1.25rem 1rem; border-bottom: 1px solid var(--border); }
+.logo-jp { font-family: var(--serif); font-size: 26px; font-weight: 300; color: var(--red); line-height: 1; }
+.logo-en { font-size: 11px; color: var(--text3); letter-spacing: 0.12em; margin-top: 5px; }
+.progress-mini { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+.prog-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-bottom: 6px; letter-spacing: 0.04em; }
+.prog-track { height: 4px; background: var(--bg4); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--red); border-radius: 3px; transition: width 0.35s ease; }
+.nav { padding: 0.75rem 0; flex: 1; overflow-y: auto; }
+.nav-section-title { font-size: 10px; color: var(--text3); letter-spacing: 0.12em; padding: 0.75rem 1.25rem 0.35rem; text-transform: uppercase; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 1.25rem; cursor: pointer;
+  color: var(--text2); font-size: 13px; transition: all 0.15s; border-left: 2px solid transparent; user-select: none;
+}
+.nav-item:hover { color: var(--text); background: var(--bg3); }
+.nav-item.active { color: var(--text); background: var(--red-light); border-left-color: var(--red); }
+.nav-item .icon { width: 18px; text-align: center; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto; font-size: 10px; padding: 2px 7px; border-radius: 999px;
+  background: var(--bg4); color: var(--text3); font-weight: 500;
+}
+.nav-badge.done { background: var(--green-bg); color: var(--green); }
+.sidebar-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); font-size: 11px; color: var(--text3); }
+.main { margin-left: 230px; flex: 1; min-height: 100vh; }
+.topbar {
+  padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex;
+  align-items: center; justify-content: space-between; background: var(--bg);
+  position: sticky; top: 0; z-index: 40; gap: 1rem; flex-wrap: wrap;
+}
+.topbar-title { font-size: 17px; font-weight: 500; }
+.topbar-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.topbar-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.script-toggle, .lang-toggle { display: flex; border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden; background: var(--bg2); }
+.script-btn, .lang-btn {
+  padding: 6px 14px; font-size: 12px; font-weight: 500; background: transparent; border: none;
+  cursor: pointer; color: var(--text2); transition: all 0.15s;
+}
+.script-btn.active, .lang-btn.active { background: var(--red); color: #fff; }
+.script-btn:hover:not(.active), .lang-btn:hover:not(.active) { background: var(--bg3); color: var(--text); }
+.icon-btn {
+  width: 34px; height: 34px; border: 1px solid var(--border2); border-radius: var(--radius);
+  background: var(--bg2); cursor: pointer; color: var(--text2); display: flex; align-items: center; justify-content: center;
+}
+.icon-btn:hover { background: var(--bg3); color: var(--text); }
+.page { display: none; padding: 1.75rem; max-width: 1200px; }
+.page.active { display: block; }
+.lesson-intro {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;
+  margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.5rem;
+}
+.lesson-intro-icon { font-family: var(--serif); font-size: 52px; color: var(--red); line-height: 1; flex-shrink: 0; }
+.lesson-intro h2 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+.lesson-intro p { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.info-chips, .vocab-cats, .quiz-mode-switch { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.chip, .mode-btn, .vocab-cat-btn, .tiny-btn {
+  padding: 6px 12px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border2);
+  color: var(--text2); background: var(--bg2); cursor: pointer; transition: all 0.15s;
+}
+.mode-btn.active, .vocab-cat-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+.chip { cursor: default; }
+.row-group { margin-bottom: 2rem; }
+.row-title {
+  font-size: 11px; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.75rem;
+}
+.row-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.kana-grid, .dakuten-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.combo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.kana-card, .dk-card, .combo-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 8px;
+  text-align: center; cursor: pointer; transition: all 0.18s; user-select: none; min-height: 90px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative;
+}
+.kana-card:hover, .dk-card:hover, .combo-card:hover { border-color: var(--border2); background: var(--bg3); transform: translateY(-2px); }
+.kana-card.learned { border-color: rgba(229,83,75,0.35); background: var(--red-light); }
+.kana-card.selected { border: 1.5px solid var(--red); background: var(--red-light); }
+.kana-card.empty { visibility: hidden; pointer-events: none; }
+.kana-char, .dk-new, .combo-chars { font-family: var(--serif); font-size: 30px; line-height: 1; color: var(--text); }
+.kana-card.learned .kana-char { color: var(--red); }
+.kana-rom, .dk-rom, .combo-rom { font-size: 11px; color: var(--text3); font-weight: 500; letter-spacing: 0.06em; }
+.kana-dot { position: absolute; top: 7px; right: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--red); display: none; }
+.kana-card.learned .kana-dot { display: block; }
+.detail-panel {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  margin-bottom: 1.5rem; overflow: hidden; display: none;
+}
+.detail-panel.open { display: block; }
+.detail-inner { display: grid; grid-template-columns: 180px 1fr 1fr; }
+.detail-char-col {
+  background: var(--red-light); border-right: 1px solid var(--border); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 1.5rem 1rem; gap: 8px;
+}
+.detail-big { font-family: var(--serif); font-size: 72px; color: var(--red); line-height: 1; }
+.detail-rom { font-size: 20px; font-weight: 300; color: var(--text2); letter-spacing: 0.04em; }
+.detail-info-col, .detail-stroke-col { padding: 1.25rem; }
+.detail-info-col { border-right: 1px solid var(--border); }
+.detail-section-title { font-size: 10px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+.pronunciation-note, .stroke-tip { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 1rem; }
+.example-word { background: var(--bg3); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ex-jp { font-family: var(--serif); font-size: 18px; color: var(--text); }
+.ex-rom, .ex-mean { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.mark-btn, .quiz-next, .fc-btn {
+  padding: 8px 16px; border-radius: var(--radius); font-size: 12px; font-weight: 500; cursor: pointer;
+  border: 1px solid var(--border2); color: var(--text2); background: var(--bg3); transition: all 0.15s;
+}
+.mark-btn.marked, .quiz-next { background: var(--red); color: #fff; border-color: var(--red); }
+.close-detail { display: block; text-align: right; padding: 8px 12px; border-top: 1px solid var(--border); cursor: pointer; font-size: 11px; color: var(--text3); }
+.audio-btn {
+  display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px;
+  border: 1px solid var(--border2); border-radius: 50%; background: var(--bg2); cursor: pointer; color: var(--red); font-size: 10px;
+}
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 8px; }
+.section-head h2 { font-size: 20px; font-weight: 500; }
+.section-head .sub { font-size: 12px; color: var(--text3); }
+.tip-box { background: var(--yellow-bg); border: 1px solid rgba(210,153,34,0.3); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--yellow); margin-bottom: 1.25rem; line-height: 1.6; }
+.dk-pair { display: flex; justify-content: center; align-items: baseline; gap: 6px; }
+.dk-orig { font-family: var(--serif); font-size: 20px; color: var(--text3); }
+.dk-arrow { font-size: 12px; color: var(--text3); }
+.combo-chars { font-size: 24px; }
+.pitch-section, .kanji-card, .passage-card, .sov-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem;
+}
+.pitch-section h3, .kanji-card h3 { font-size: 15px; font-weight: 500; margin-bottom: 10px; color: var(--text); }
+.pitch-section p, .kanji-card p { font-size: 13px; color: var(--text2); line-height: 1.8; margin-bottom: 12px; }
+.pitch-type-grid, .sov-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 14px; }
+.pitch-type-card, .sov-lang { background: var(--bg3); border-radius: var(--radius); padding: 14px; }
+.pitch-type-name { font-size: 12px; font-weight: 600; color: var(--red); margin-bottom: 6px; }
+.pitch-viz { display: inline-flex; gap: 3px; align-items: flex-end; height: 36px; padding: 2px 4px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); }
+.pitch-mora { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 2px 1px; }
+.pitch-bar { width: 16px; border-radius: 2px; }
+.pitch-bar.h { background: var(--red); height: 18px; }
+.pitch-bar.l { background: var(--bg4); height: 7px; }
+.pitch-kana { font-size: 10px; color: var(--text2); font-family: var(--serif); }
+.pitch-num { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 6px; background: var(--red); color: #fff; border-radius: 999px; font-size: 11px; font-weight: 600; }
+.kanji-hero { background: linear-gradient(135deg, var(--red-light) 0%, var(--bg2) 100%); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem 1.5rem; margin-bottom: 1.5rem; text-align: center; }
+.kanji-hero-char { font-family: var(--serif); font-size: 96px; color: var(--red); line-height: 1; }
+.kanji-examples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.kanji-ex { background: var(--bg3); border-radius: var(--radius); padding: 10px 14px; min-width: 70px; text-align: center; }
+.kanji-ex-char { font-family: var(--serif); font-size: 28px; color: var(--red); line-height: 1; }
+.vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.vocab-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; }
+.vocab-kanji { font-family: var(--serif); font-size: 26px; color: var(--text); line-height: 1.1; }
+.vocab-hira { font-size: 13px; color: var(--text2); margin-top: 5px; font-family: var(--serif); }
+.vocab-meaning { font-size: 13px; color: var(--text2); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.grammar-tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+.grammar-tab { padding: 10px 16px; font-size: 13px; font-weight: 500; background: transparent; border: none; cursor: pointer; color: var(--text2); border-bottom: 2px solid transparent; }
+.grammar-tab.active { color: var(--text); border-bottom-color: var(--red); }
+.grammar-item { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; overflow: hidden; }
+.grammar-header { padding: 14px 18px; cursor: pointer; display: flex; align-items: center; gap: 14px; }
+.grammar-header:hover { background: var(--bg3); }
+.grammar-pattern { font-family: var(--serif); font-size: 22px; color: var(--red); min-width: 80px; flex-shrink: 0; }
+.grammar-title { font-size: 14px; font-weight: 500; }
+.grammar-toggle { color: var(--text3); margin-left: auto; transition: transform 0.2s; }
+.grammar-item.open .grammar-toggle { transform: rotate(180deg); }
+.grammar-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--border); }
+.grammar-item.open .grammar-body { display: block; }
+.grammar-desc { font-size: 13px; color: var(--text2); line-height: 1.75; padding: 14px 0; }
+.grammar-ex { background: var(--bg3); border-radius: var(--radius); padding: 12px 14px; margin-top: 8px; }
+.grammar-ex-jp, .psent-jp { font-family: var(--serif); font-size: 17px; color: var(--text); display: flex; align-items: center; gap: 10px; }
+.grammar-ex-rom, .psent-rom { font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: 0.04em; }
+.grammar-ex-trans, .psent-translation { font-size: 13px; color: var(--text2); margin-top: 5px; }
+.passage-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+.passage-title { font-size: 16px; font-weight: 500; }
+.passage-subtitle { font-size: 12px; color: var(--text3); margin-bottom: 14px; }
+.passage-sentence { padding: 12px 14px; border-radius: var(--radius); cursor: pointer; margin-bottom: 6px; border: 1px solid transparent; }
+.passage-sentence:hover { background: var(--bg3); border-color: var(--border); }
+.passage-sentence.revealed { background: var(--red-light); border-color: rgba(229,83,75,0.2); }
+.psent-trans { display: none; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--border); }
+.passage-sentence.revealed .psent-trans { display: block; }
+.flashcard-container, .quiz-container { max-width: 560px; margin: 0 auto; text-align: center; }
+.flashcard-wrap { perspective: 1200px; margin: 2rem auto; width: min(320px, 90vw); height: 220px; }
+.flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s ease; cursor: pointer; }
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-face { position: absolute; width: 100%; height: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.flashcard-front .fc-char { font-family: var(--serif); font-size: 72px; color: var(--text); line-height: 1; }
+.flashcard-back { transform: rotateY(180deg); }
+.flashcard-back .fc-rom { font-size: 32px; font-weight: 300; color: var(--red); letter-spacing: 0.06em; }
+.flashcard-back .fc-word { font-family: var(--serif); font-size: 22px; color: var(--text2); }
+.fc-hint, .fc-counter { font-size: 12px; color: var(--text3); }
+.flashcard-nav { display: flex; gap: 10px; justify-content: center; margin-top: 1rem; }
+.fc-btn.good { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.fc-btn.skip { background: rgba(229,83,75,0.1); border-color: var(--red); color: var(--red); }
+.quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; gap: 10px; }
+.quiz-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 16px; text-align: center; flex: 1; }
+.quiz-stat-num { font-size: 22px; font-weight: 600; }
+.quiz-stat-num.green { color: var(--green); }
+.quiz-stat-num.red { color: var(--red); }
+.quiz-stat-num.yellow { color: var(--yellow); }
+.quiz-stat-label { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.quiz-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2.5rem; text-align: center; margin-bottom: 1.5rem; }
+.quiz-prompt-label { font-size: 11px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+.quiz-char { font-family: var(--serif); font-size: 100px; line-height: 1; color: var(--text); margin-bottom: 0.5rem; display: block; }
+.quiz-char.romaji-mode { font-family: var(--sans); font-size: 52px; font-weight: 300; }
+.choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+.choice-btn { padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg2); cursor: pointer; color: var(--text); font-size: 15px; transition: all 0.15s; }
+.choice-btn.jp-choice { font-family: var(--serif); font-size: 28px; }
+.choice-btn:hover:not(:disabled):not(.correct):not(.wrong) { border-color: var(--border2); background: var(--bg3); }
+.choice-btn.correct { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.choice-btn.wrong { background: rgba(229,83,75,0.12); border-color: var(--red); color: var(--red); }
+.quiz-feedback { min-height: 22px; font-size: 14px; margin-bottom: 1rem; color: var(--text2); }
+.quiz-next { width: 100%; padding: 13px; display: none; }
+.chart-table { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; border-collapse: collapse; width: 100%; }
+.chart-table th, .chart-table td { border: 1px solid var(--border); padding: 0; text-align: center; min-width: 70px; }
+.chart-table th { background: var(--bg3); font-size: 10px; color: var(--text3); letter-spacing: 0.08em; padding: 8px 6px; text-transform: uppercase; }
+.chart-cell { padding: 10px 6px; cursor: pointer; transition: background 0.15s; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.chart-cell:hover { background: var(--bg4); }
+.chart-cell.learned { background: var(--red-light); }
+.chart-cell .cc { font-family: var(--serif); font-size: 22px; color: var(--text); }
+.chart-cell .cr { font-size: 10px; color: var(--text3); }
+.hamburger { display: none; position: fixed; top: 12px; left: 12px; z-index: 200; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 18px; color: var(--text); line-height: 1; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 49; }
+@media (max-width: 820px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .hamburger { display: block; }
+  .sidebar-overlay.show { display: block; }
+  .topbar { padding: 0.85rem 1rem 0.85rem 3.4rem; }
+  .page { padding: 1rem; }
+  .detail-inner { grid-template-columns: 1fr; }
+  .detail-char-col, .detail-info-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .kana-grid { gap: 6px; }
+  .kana-card { min-height: 72px; padding: 10px 4px; }
+  .kana-char { font-size: 22px; }
+  .vocab-grid, .sov-grid, .pitch-type-grid { grid-template-columns: 1fr; }
+  .combo-grid { grid-template-columns: repeat(3, 1fr); }
+  .dakuten-grid { grid-template-columns: repeat(4, 1fr); }
+  .lesson-intro { flex-direction: column; text-align: center; gap: 1rem; padding: 1.25rem; }
+}
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-jp">かな</div>
+      <div class="logo-en" data-i18n="learn_japanese">LEARN JAPANESE</div>
+    </div>
+    <div class="progress-mini">
+      <div class="prog-label"><span data-i18n="overall_progress">OVERALL PROGRESS</span><span id="prog-pct">0%</span></div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <nav class="nav">
+      <div class="nav-section-title" data-i18n="nav_learn">Learn</div>
+      <div class="nav-item active" onclick="goTo('hiragana')"><span class="icon">あ</span><span data-i18n="nav_hiragana">Hiragana</span><span class="nav-badge" id="badge-hira">0/46</span></div>
+      <div class="nav-item" onclick="goTo('katakana')"><span class="icon">ア</span><span data-i18n="nav_katakana">Katakana</span><span class="nav-badge" id="badge-kata">0/46</span></div>
+      <div class="nav-item" onclick="goTo('dakuten')"><span class="icon">が</span><span data-i18n="nav_dakuten">Dakuten ゛゜</span></div>
+      <div class="nav-item" onclick="goTo('combos')"><span class="icon">きゃ</span><span data-i18n="nav_combos">Combos きゃ</span></div>
+      <div class="nav-item" onclick="goTo('pitch')"><span class="icon">♪</span><span data-i18n="nav_pitch">Pitch Accent</span></div>
+      <div class="nav-item" onclick="goTo('kanji')"><span class="icon">漢</span><span data-i18n="nav_kanji">Kanji Intro</span></div>
+      <div class="nav-section-title">JLPT N5</div>
+      <div class="nav-item" onclick="goTo('vocab')"><span class="icon">本</span><span data-i18n="nav_vocab">Vocabulary</span></div>
+      <div class="nav-item" onclick="goTo('grammar')"><span class="icon">文</span><span data-i18n="nav_grammar">Grammar</span></div>
+      <div class="nav-item" onclick="goTo('passages')"><span class="icon">読</span><span data-i18n="nav_passages">Passages</span></div>
+      <div class="nav-section-title" data-i18n="nav_practice">Practice</div>
+      <div class="nav-item" onclick="goTo('flashcards')"><span class="icon">卡</span><span data-i18n="nav_flashcards">Flashcards</span></div>
+      <div class="nav-item" onclick="goTo('quiz')"><span class="icon">問</span><span data-i18n="nav_quiz">Quiz</span></div>
+      <div class="nav-item" onclick="goTo('chart')"><span class="icon">表</span><span data-i18n="nav_chart">Full Chart</span></div>
+    </nav>
+    <div class="sidebar-footer" data-i18n="footer_made">Made with care for Japanese learners</div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="page-title">Hiragana 五十音</div>
+        <div class="topbar-sub" id="page-sub">Learn the 46 basic hiragana characters</div>
+      </div>
+      <div class="topbar-controls">
+        <div class="script-toggle" id="script-toggle">
+          <button class="script-btn active" onclick="setScript('hiragana')" data-i18n="hiragana_btn">Hiragana ひ</button>
+          <button class="script-btn" onclick="setScript('katakana')" data-i18n="katakana_btn">Katakana カ</button>
+        </div>
+        <div class="lang-toggle">
+          <button class="lang-btn active" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('zh')">繁中</button>
+        </div>
+        <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      </div>
+    </div>
+
+    <div class="page active" id="page-hiragana">
+      <div class="lesson-intro">
+        <div class="lesson-intro-icon">あ</div>
+        <div>
+          <h2 data-i18n="hira_title">Hiragana - the foundation of Japanese</h2>
+          <p data-i18n="hira_desc">Hiragana is the first script you'll learn. It has 46 basic characters, each representing one sound. Click any character to learn it.</p>
+        </div>
+      </div>
+      <div class="info-chips"><span class="chip" data-i18n="chip_46">46 characters</span><span class="chip" data-i18n="chip_curved">Curved, flowing strokes</span><span class="chip" data-i18n="chip_native">Used for native Japanese words</span></div>
+      <div id="detail-panel-h" class="detail-panel"></div>
+      <div id="kana-rows-h"></div>
+    </div>
+
+    <div class="page" id="page-katakana">
+      <div class="lesson-intro">
+        <div class="lesson-intro-icon">ア</div>
+        <div>
+          <h2 data-i18n="kata_title">Katakana - for foreign words and emphasis</h2>
+          <p data-i18n="kata_desc">Katakana has the same sounds as hiragana, but with sharper strokes. It is mainly used for loanwords, foreign names, and scientific terms.</p>
+        </div>
+      </div>
+      <div class="info-chips"><span class="chip" data-i18n="chip_46">46 characters</span><span class="chip" data-i18n="chip_angular">Angular, sharp strokes</span><span class="chip" data-i18n="chip_loan">Loanwords and foreign names</span></div>
+      <div id="detail-panel-k" class="detail-panel"></div>
+      <div id="kana-rows-k"></div>
+    </div>
+
+    <div class="page" id="page-dakuten">
+      <div class="section-head"><h2 data-i18n="dakuten_h">Dakuten and Handakuten</h2><span class="sub" data-i18n="dakuten_sub">+25 voiced sounds</span></div>
+      <div class="tip-box" data-i18n="dakuten_tip"><strong>Dakuten</strong> (゛) adds voicing: か (ka) becomes が (ga). <strong>Handakuten</strong> (゜) turns the H row into the P row.</div>
+      <div id="dakuten-content"></div>
+    </div>
+
+    <div class="page" id="page-combos">
+      <div class="section-head"><h2 data-i18n="combos_h">Combination Kana</h2><span class="sub" data-i18n="combos_sub">33 compound sounds</span></div>
+      <div class="tip-box" data-i18n="combos_tip">Combine an I-row kana with small や, ゆ, or よ to create sounds like きゃ, きゅ, きょ.</div>
+      <div id="combos-content"></div>
+    </div>
+
+    <div class="page" id="page-pitch"><div id="pitch-content"></div></div>
+    <div class="page" id="page-kanji"><div id="kanji-content"></div></div>
+
+    <div class="page" id="page-vocab">
+      <div class="section-head"><h2 data-i18n="vocab_h">JLPT N5 Vocabulary</h2><span class="sub" data-i18n="vocab_sub">Essential words with pitch accent</span></div>
+      <div class="tip-box" id="vocab-tip"></div>
+      <div class="vocab-cats" id="vocab-cats"></div>
+      <div class="vocab-grid" id="vocab-grid"></div>
+    </div>
+
+    <div class="page" id="page-grammar">
+      <div class="section-head"><h2 data-i18n="grammar_h">JLPT N5 Grammar</h2><span class="sub" data-i18n="grammar_sub">Sentence structure and functional vocab</span></div>
+      <div id="sov-intro-card"></div>
+      <div class="grammar-tabs">
+        <button class="grammar-tab active" onclick="setGrammarTab('struct')" data-i18n="grammar_tab_struct">Sentence Structure</button>
+        <button class="grammar-tab" onclick="setGrammarTab('func')" data-i18n="grammar_tab_func">Functional Vocab</button>
+      </div>
+      <div id="grammar-list"></div>
+    </div>
+
+    <div class="page" id="page-passages">
+      <div class="section-head"><h2 data-i18n="passages_h">N5 Reading Passages</h2><span class="sub" data-i18n="passages_sub">Click any sentence to reveal its translation</span></div>
+      <div class="tip-box" data-i18n="passages_tip">Read the Japanese first, then click each sentence to check your understanding.</div>
+      <div id="passages-content"></div>
+    </div>
+
+    <div class="page" id="page-flashcards">
+      <div class="flashcard-container">
+        <div class="section-head"><h2 data-i18n="fc_h">Flashcard Practice</h2></div>
+        <div class="quiz-mode-switch">
+          <button class="mode-btn active" onclick="setFcScript('hiragana',this)" data-i18n="hiragana_btn">Hiragana ひ</button>
+          <button class="mode-btn" onclick="setFcScript('katakana',this)" data-i18n="katakana_btn">Katakana カ</button>
+          <button class="mode-btn" onclick="setFcScript('both',this)" data-i18n="both_btn">Both</button>
+        </div>
+        <div class="flashcard-wrap">
+          <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="flashcard-face flashcard-front"><div class="fc-char" id="fc-front">あ</div><div class="fc-hint" data-i18n="fc_tap">tap to reveal</div></div>
+            <div class="flashcard-face flashcard-back"><div class="fc-rom" id="fc-back-rom">a</div><div class="fc-word" id="fc-back-word">あおい</div><div class="fc-hint" id="fc-back-mean">blue</div></div>
+          </div>
+        </div>
+        <div class="flashcard-nav">
+          <button class="fc-btn skip" onclick="fcAnswer(false)" data-i18n="fc_again">Again</button>
+          <button class="fc-btn good" onclick="fcAnswer(true)" data-i18n="fc_good">Got it</button>
+        </div>
+        <div class="fc-counter" id="fc-counter">Card 1 of 46</div>
+        <div class="prog-track" style="margin-top:12px"><div class="prog-fill" id="fc-prog" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-quiz">
+      <div class="quiz-container">
+        <div class="quiz-mode-switch">
+          <button class="mode-btn active" onclick="setQuizMode('kana-to-rom',this)" data-i18n="qm_k2r">Kana to Romaji</button>
+          <button class="mode-btn" onclick="setQuizMode('rom-to-kana',this)" data-i18n="qm_r2k">Romaji to Kana</button>
+          <button class="mode-btn" onclick="setQuizMode('both-scripts',this)" data-i18n="qm_mixed">Mixed</button>
+        </div>
+        <div class="quiz-header">
+          <div class="quiz-stat"><div class="quiz-stat-num green" id="qs-correct">0</div><div class="quiz-stat-label" data-i18n="quiz_correct">Correct</div></div>
+          <div class="quiz-stat"><div class="quiz-stat-num red" id="qs-wrong">0</div><div class="quiz-stat-label" data-i18n="quiz_wrong">Wrong</div></div>
+          <div class="quiz-stat"><div class="quiz-stat-num yellow" id="qs-pct">-</div><div class="quiz-stat-label" data-i18n="quiz_acc">Accuracy</div></div>
+        </div>
+        <div class="quiz-card">
+          <div class="quiz-prompt-label" id="q-label">What is the romaji reading?</div>
+          <span class="quiz-char" id="q-char">あ</span>
+        </div>
+        <div class="choices-grid" id="choices"></div>
+        <div class="quiz-feedback" id="q-feedback"></div>
+        <button class="quiz-next" id="quiz-next" onclick="nextQ()" data-i18n="quiz_next">Next</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-chart">
+      <div class="section-head"><h2 data-i18n="chart_h">Complete Reference Chart</h2><span class="sub" data-i18n="chart_sub">All 92 kana at a glance</span></div>
+      <div style="overflow-x:auto"><table class="chart-table" id="chart-table"></table></div>
+    </div>
+  </main>
+</div>
+
+<script>
+const T = {
+  en: {
+    learn_japanese:'LEARN JAPANESE', overall_progress:'OVERALL PROGRESS', nav_learn:'Learn',
+    nav_hiragana:'Hiragana', nav_katakana:'Katakana', nav_dakuten:'Dakuten ゛゜', nav_combos:'Combos きゃ',
+    nav_pitch:'Pitch Accent', nav_kanji:'Kanji Intro', nav_vocab:'Vocabulary', nav_grammar:'Grammar',
+    nav_passages:'Passages', nav_practice:'Practice', nav_flashcards:'Flashcards', nav_quiz:'Quiz', nav_chart:'Full Chart',
+    footer_made:'Made with care for Japanese learners', hiragana_btn:'Hiragana ひ', katakana_btn:'Katakana カ', both_btn:'Both',
+    chip_46:'46 characters', chip_curved:'Curved, flowing strokes', chip_native:'Used for native Japanese words',
+    chip_angular:'Angular, sharp strokes', chip_loan:'Loanwords and foreign names',
+    hira_title:'Hiragana - the foundation of Japanese', hira_desc:'Hiragana is the first script you will learn. It has 46 basic characters, each representing one sound. Click any character to learn it.',
+    kata_title:'Katakana - for foreign words and emphasis', kata_desc:'Katakana has the same sounds as hiragana, but with sharper strokes. It is mainly used for loanwords, foreign names, and scientific terms.',
+    dakuten_h:'Dakuten and Handakuten', dakuten_sub:'+25 voiced sounds', dakuten_tip:'<strong>Dakuten</strong> (゛) adds voicing: か (ka) becomes が (ga). <strong>Handakuten</strong> (゜) turns the H row into the P row.',
+    combos_h:'Combination Kana', combos_sub:'33 compound sounds', combos_tip:'Combine an I-row kana with small や, ゆ, or よ to create sounds like きゃ, きゅ, きょ.',
+    vocab_h:'JLPT N5 Vocabulary', vocab_sub:'Essential words with pitch accent', vocab_tip:'Pitch accent is not tested on JLPT N5, but noticing it early helps your pronunciation sound more natural.',
+    grammar_h:'JLPT N5 Grammar', grammar_sub:'Sentence structure and functional vocab', grammar_tab_struct:'Sentence Structure', grammar_tab_func:'Functional Vocab',
+    passages_h:'N5 Reading Passages', passages_sub:'Click any sentence to reveal its translation', passages_tip:'Read the Japanese first, then click each sentence to check your understanding.',
+    fc_h:'Flashcard Practice', fc_tap:'tap to reveal', fc_again:'Again', fc_good:'Got it',
+    qm_k2r:'Kana to Romaji', qm_r2k:'Romaji to Kana', qm_mixed:'Mixed', quiz_correct:'Correct', quiz_wrong:'Wrong', quiz_acc:'Accuracy', quiz_next:'Next',
+    chart_h:'Complete Reference Chart', chart_sub:'All 92 kana at a glance',
+    mark_learned:'Mark as learned', learned_tag:'Learned', close_tag:'Close', pron_label:'Pronunciation', example_label:'Example word', stroke_label:'Stroke tip',
+    correct_msg:'Correct!', wrong_was:'It was', q_prompt_k2r:'What is the romaji reading?', q_prompt_r2k:'Which kana matches?'
+  },
+  zh: {
+    learn_japanese:'學日語', overall_progress:'整體進度', nav_learn:'學習',
+    nav_hiragana:'平假名', nav_katakana:'片假名', nav_dakuten:'濁音 ゛゜', nav_combos:'拗音 きゃ',
+    nav_pitch:'音調標記', nav_kanji:'漢字入門', nav_vocab:'單字', nav_grammar:'文法',
+    nav_passages:'閱讀', nav_practice:'練習', nav_flashcards:'單字卡', nav_quiz:'測驗', nav_chart:'完整表',
+    footer_made:'為日語學習者用心打造', hiragana_btn:'平假名 ひ', katakana_btn:'片假名 カ', both_btn:'全部',
+    chip_46:'46個字符', chip_curved:'圓潤、流暢的筆畫', chip_native:'用於日語固有詞',
+    chip_angular:'稜角、銳利的筆畫', chip_loan:'外來語與外國名字',
+    hira_title:'平假名 - 日語的基礎', hira_desc:'平假名是你最先學習的文字系統，共有46個基本字符，每個代表一個音。點擊任何字符開始學習。',
+    kata_title:'片假名 - 用於外來語和強調', kata_desc:'片假名和平假名有相同的音，但筆畫更銳利。主要用於外來語、外國名字和科學術語。',
+    dakuten_h:'濁音與半濁音', dakuten_sub:'額外25個有聲音', dakuten_tip:'<strong>濁音</strong> (゛) 讓聲音濁化：か (ka) 變成 が (ga)。<strong>半濁音</strong> (゜) 把H行變成P行。',
+    combos_h:'拗音', combos_sub:'33個複合音', combos_tip:'把I段假名與小寫 や、ゆ、よ 結合，形成 きゃ、きゅ、きょ 這類聲音。',
+    vocab_h:'JLPT N5 單字', vocab_sub:'必備單字與音調標記', vocab_tip:'音調不在JLPT N5考試範圍內，但及早留意能讓發音更自然。',
+    grammar_h:'JLPT N5 文法', grammar_sub:'句型結構與功能性詞彙', grammar_tab_struct:'句型結構', grammar_tab_func:'功能性詞彙',
+    passages_h:'N5 閱讀練習', passages_sub:'點擊任何句子顯示翻譯', passages_tip:'先讀日文，再點擊句子確認理解。',
+    fc_h:'單字卡練習', fc_tap:'點擊翻面', fc_again:'再來', fc_good:'答對',
+    qm_k2r:'假名到羅馬字', qm_r2k:'羅馬字到假名', qm_mixed:'混合', quiz_correct:'答對', quiz_wrong:'答錯', quiz_acc:'正確率', quiz_next:'下一題',
+    chart_h:'完整參考表', chart_sub:'所有92個假名一目了然',
+    mark_learned:'標記已學', learned_tag:'已學會', close_tag:'關閉', pron_label:'發音', example_label:'例詞', stroke_label:'筆順提示',
+    correct_msg:'答對了！', wrong_was:'答案是', q_prompt_k2r:'羅馬字怎麼讀？', q_prompt_r2k:'對應的假名是？'
+  }
+};
+
+const ROWS = [
+  {label:'Vowels', h:['あ','い','う','え','お'], k:['ア','イ','ウ','エ','オ'], r:['a','i','u','e','o']},
+  {label:'K row', h:['か','き','く','け','こ'], k:['カ','キ','ク','ケ','コ'], r:['ka','ki','ku','ke','ko']},
+  {label:'S row', h:['さ','し','す','せ','そ'], k:['サ','シ','ス','セ','ソ'], r:['sa','shi','su','se','so']},
+  {label:'T row', h:['た','ち','つ','て','と'], k:['タ','チ','ツ','テ','ト'], r:['ta','chi','tsu','te','to']},
+  {label:'N row', h:['な','に','ぬ','ね','の'], k:['ナ','ニ','ヌ','ネ','ノ'], r:['na','ni','nu','ne','no']},
+  {label:'H row', h:['は','ひ','ふ','へ','ほ'], k:['ハ','ヒ','フ','ヘ','ホ'], r:['ha','hi','fu','he','ho']},
+  {label:'M row', h:['ま','み','む','め','も'], k:['マ','ミ','ム','メ','モ'], r:['ma','mi','mu','me','mo']},
+  {label:'Y row', h:['や','','ゆ','','よ'], k:['ヤ','','ユ','','ヨ'], r:['ya','','yu','','yo']},
+  {label:'R row', h:['ら','り','る','れ','ろ'], k:['ラ','リ','ル','レ','ロ'], r:['ra','ri','ru','re','ro']},
+  {label:'W row + N', h:['わ','','','','を'], k:['ワ','','','','ヲ'], r:['wa','','','','wo']},
+  {label:'N', h:['ん','','','',''], k:['ン','','','',''], r:['n','','','','']}
+];
+
+const EXAMPLES = {
+  'あ':['あおい','aoi','blue','藍色'], 'い':['いぬ','inu','dog','狗'], 'う':['うみ','umi','sea','海'], 'え':['えき','eki','station','車站'], 'お':['おにぎり','onigiri','rice ball','飯糰'],
+  'か':['かさ','kasa','umbrella','雨傘'], 'き':['きつね','kitsune','fox','狐狸'], 'く':['くも','kumo','cloud','雲'], 'け':['けいたい','keitai','mobile phone','手機'], 'こ':['こえ','koe','voice','聲音'],
+  'さ':['さくら','sakura','cherry blossom','櫻花'], 'し':['すし','sushi','sushi','壽司'], 'す':['すいか','suika','watermelon','西瓜'], 'せ':['せんせい','sensei','teacher','老師'], 'そ':['そら','sora','sky','天空'],
+  'た':['たべる','taberu','to eat','吃'], 'ち':['ちず','chizu','map','地圖'], 'つ':['つき','tsuki','moon','月亮'], 'て':['てがみ','tegami','letter','信件'], 'と':['とり','tori','bird','鳥'],
+  'な':['なつ','natsu','summer','夏天'], 'に':['にわ','niwa','garden','庭園'], 'ぬ':['ぬの','nuno','cloth','布'], 'ね':['ねこ','neko','cat','貓'], 'の':['のり','nori','seaweed','海苔'],
+  'は':['はな','hana','flower','花'], 'ひ':['ひと','hito','person','人'], 'ふ':['ふじさん','fujisan','Mt. Fuji','富士山'], 'へ':['へや','heya','room','房間'], 'ほ':['ほし','hoshi','star','星星'],
+  'ま':['まち','machi','town','城鎮'], 'み':['みず','mizu','water','水'], 'む':['むし','mushi','insect','昆蟲'], 'め':['めがね','megane','glasses','眼鏡'], 'も':['もり','mori','forest','森林'],
+  'や':['やま','yama','mountain','山'], 'ゆ':['ゆき','yuki','snow','雪'], 'よ':['よる','yoru','night','夜晚'],
+  'ら':['らーめん','ramen','ramen','拉麵'], 'り':['りんご','ringo','apple','蘋果'], 'る':['るす','rusu','away from home','外出'], 'れ':['れんしゅう','renshuu','practice','練習'], 'ろ':['ろうそく','rousoku','candle','蠟燭'],
+  'わ':['わらう','warau','to laugh','笑'], 'を':['(particle)','wo','object marker','受詞助詞'], 'ん':['えんぴつ','enpitsu','pencil','鉛筆']
+};
+const KATA_EXAMPLES = {
+  'ア':['アイス','aisu','ice cream','冰淇淋'], 'イ':['インク','inku','ink','墨水'], 'ウ':['ウール','uuru','wool','羊毛'], 'エ':['エアコン','eakon','air conditioner','冷氣'], 'オ':['オレンジ','orenji','orange','橘子'],
+  'カ':['カメラ','kamera','camera','相機'], 'キ':['キロ','kiro','kilo','公斤'], 'ク':['クラス','kurasu','class','班級'], 'ケ':['ケーキ','keeki','cake','蛋糕'], 'コ':['コーヒー','koohii','coffee','咖啡'],
+  'サ':['サラダ','sarada','salad','沙拉'], 'シ':['シャツ','shatsu','shirt','襯衫'], 'ス':['スポーツ','supootsu','sports','運動'], 'セ':['セーター','seetaa','sweater','毛衣'], 'ソ':['ソファ','sofa','sofa','沙發'],
+  'タ':['タクシー','takushii','taxi','計程車'], 'チ':['チーズ','chiizu','cheese','起司'], 'ツ':['ツアー','tsuaa','tour','旅行團'], 'テ':['テレビ','terebi','TV','電視'], 'ト':['トマト','tomato','tomato','番茄'],
+  'ナ':['ナイフ','naifu','knife','刀'], 'ニ':['ニュース','nyuusu','news','新聞'], 'ヌ':['ヌードル','nuudoru','noodle','麵'], 'ネ':['ネクタイ','nekutai','tie','領帶'], 'ノ':['ノート','nooto','notebook','筆記本'],
+  'ハ':['ハンバーガー','hanbaagaa','hamburger','漢堡'], 'ヒ':['ホテル','hoteru','hotel','旅館'], 'フ':['フォーク','fooku','fork','叉子'], 'ヘ':['ヘリ','heri','helicopter','直升機'], 'ホ':['ホール','hooru','hall','大廳'],
+  'マ':['マスク','masuku','mask','口罩'], 'ミ':['ミルク','miruku','milk','牛奶'], 'ム':['ムード','muudo','mood','氣氛'], 'メ':['メール','meeru','email','電子郵件'], 'モ':['モデル','moderu','model','模特兒'],
+  'ヤ':['ヨガ','yoga','yoga','瑜伽'], 'ユ':['ユーロ','yuuro','euro','歐元'], 'ヨ':['ヨット','yotto','yacht','遊艇'],
+  'ラ':['ラジオ','rajio','radio','收音機'], 'リ':['リスト','risuto','list','清單'], 'ル':['ルール','ruuru','rule','規則'], 'レ':['レストラン','resutoran','restaurant','餐廳'], 'ロ':['ロボット','robotto','robot','機器人'],
+  'ワ':['ワイン','wain','wine','葡萄酒'], 'ヲ':['ヲ','wo','rare katakana wo','少見片假名ヲ'], 'ン':['ペン','pen','pen','筆']
+};
+const STROKE_TIPS = {
+  default:['Trace slowly and keep the stroke direction consistent.','慢慢描寫，保持筆畫方向一致。'],
+  'あ':['3 strokes. Horizontal, curved left stroke, then loop.','3筆。橫、左彎，再寫圈。'],
+  'い':['2 strokes. Two simple downward curves.','2筆。兩個向下彎筆。'],
+  'う':['2 strokes. Small top stroke, then curved body.','2筆。小上筆，再寫彎曲主體。'],
+  'え':['2 strokes. Top line, then lower looped stroke.','2筆。上橫，再寫下方帶圈筆畫。'],
+  'お':['3 strokes. Horizontal, vertical curve, then dot.','3筆。橫、豎彎，最後一點。'],
+  'し':['1 stroke. One smooth fishhook curve.','1筆。一個流暢的魚鉤曲線。'],
+  'つ':['1 stroke. A compact U curve left to right.','1筆。從左到右的U形曲線。'],
+  'の':['1 stroke. A smooth open loop.','1筆。一個平滑的開口圓。'],
+  'ん':['1 stroke. Upward sweep with a soft tail.','1筆。向上掃，尾巴柔和。']
+};
+const PRON = {
+  a:['Open vowel, like a in father.','開口元音，像中文「啊」。'], i:['Like ee in feet, but short.','像中文「衣」但短促。'], u:['Close to oo, with relaxed lips.','接近「烏」，嘴唇放鬆。'], e:['Like e in bed.','像中文「ㄝ」。'], o:['Like o in go.','像中文「喔」。'],
+  shi:['Like she, not si.','接近「西」，是 shi 不是 si。'], chi:['Like chee.','接近「七」。'], tsu:['Like cats plus a short u.','像「次」加短促u音。'], fu:['Soft F, almost hu.','柔軟的F音，接近hu。'], n:['Syllabic N; changes slightly by context.','音節鼻音，會依前後音稍微變化。'],
+  default:['Pronounce each kana as one short, clean syllable.','每個假名都發成短而清楚的一個音節。']
+};
+const DAKUTEN = [
+  ['か','が','ga'],['き','ぎ','gi'],['く','ぐ','gu'],['け','げ','ge'],['こ','ご','go'],
+  ['さ','ざ','za'],['し','じ','ji'],['す','ず','zu'],['せ','ぜ','ze'],['そ','ぞ','zo'],
+  ['た','だ','da'],['ち','ぢ','ji*'],['つ','づ','zu*'],['て','で','de'],['と','ど','do'],
+  ['は','ば','ba'],['ひ','び','bi'],['ふ','ぶ','bu'],['へ','べ','be'],['ほ','ぼ','bo'],
+  ['は','ぱ','pa'],['ひ','ぴ','pi'],['ふ','ぷ','pu'],['へ','ぺ','pe'],['ほ','ぽ','po']
+];
+const COMBOS = 'きゃ kya,きゅ kyu,きょ kyo,しゃ sha,しゅ shu,しょ sho,ちゃ cha,ちゅ chu,ちょ cho,にゃ nya,にゅ nyu,にょ nyo,ひゃ hya,ひゅ hyu,ひょ hyo,みゃ mya,みゅ myu,みょ myo,りゃ rya,りゅ ryu,りょ ryo,ぎゃ gya,ぎゅ gyu,ぎょ gyo,じゃ ja,じゅ ju,じょ jo,びゃ bya,びゅ byu,びょ byo,ぴゃ pya,ぴゅ pyu,ぴょ pyo'.split(',').map(x => { const [c,r] = x.split(' '); return {c,r}; });
+const N5_VOCAB = [
+  {cat_en:'People', cat_zh:'人物', words:[['私','わたし',3,'I, me','我'],['先生','せんせい',3,'teacher','老師'],['学生','がくせい',0,'student','學生'],['友達','ともだち',0,'friend','朋友'],['家族','かぞく',1,'family','家人']]},
+  {cat_en:'Nature', cat_zh:'自然', words:[['水','みず',0,'water','水'],['山','やま',2,'mountain','山'],['川','かわ',2,'river','河流'],['空','そら',1,'sky','天空'],['花','はな',2,'flower','花'],['海','うみ',1,'sea','海']]},
+  {cat_en:'Food', cat_zh:'飲食', words:[['ご飯','ごはん',1,'rice, meal','飯、餐'],['パン','パン',1,'bread','麵包'],['肉','にく',2,'meat','肉'],['野菜','やさい',0,'vegetables','蔬菜'],['お茶','おちゃ',0,'tea','茶'],['牛乳','ぎゅうにゅう',0,'milk','牛奶']]},
+  {cat_en:'Places', cat_zh:'地點', words:[['学校','がっこう',0,'school','學校'],['家','いえ',2,'house, home','家、房子'],['駅','えき',1,'station','車站'],['店','みせ',2,'shop','商店'],['電車','でんしゃ',0,'train','電車'],['病院','びょういん',0,'hospital','醫院']]},
+  {cat_en:'Verbs', cat_zh:'動詞', words:[['食べる','たべる',2,'to eat','吃'],['飲む','のむ',1,'to drink','喝'],['見る','みる',1,'to see','看'],['聞く','きく',0,'to listen, ask','聽、問'],['行く','いく',0,'to go','去'],['読む','よむ',1,'to read','讀'],['書く','かく',1,'to write','寫']]}
+];
+const GRAMMAR_STRUCT = [
+  ['は (wa)','Topic marker は','主題助詞 は','Marks what the sentence is about. Although written は, it is pronounced wa as a particle.','標記句子的主題。作為助詞時寫作 は、讀作 wa。',[['私は学生です。','Watashi wa gakusei desu.','I am a student.','我是學生。'],['今日は寒いです。','Kyō wa samui desu.','Today is cold.','今天很冷。']]],
+  ['が (ga)','Subject marker が','主語助詞 が','Marks the grammatical subject, often new information or what exists.','標記文法主語，常用於新資訊或存在的事物。',[['猫がいます。','Neko ga imasu.','There is a cat.','有一隻貓。'],['寿司が好きです。','Sushi ga suki desu.','I like sushi.','我喜歡壽司。']]],
+  ['を (o)','Object marker を','受詞助詞 を','Marks the direct object of an action. It is pronounced o.','標記動作的直接受詞，讀作 o。',[['水を飲みます。','Mizu o nomimasu.','I drink water.','我喝水。'],['本を読みます。','Hon o yomimasu.','I read a book.','我讀書。']]],
+  ['に (ni)','Direction, time, target','方向、時間、對象','Marks destination, specific time, target, or existence location.','標記目的地、具體時間、動作對象或存在地點。',[['学校に行きます。','Gakkō ni ikimasu.','I go to school.','我去學校。'],['7時に起きます。','Shichi-ji ni okimasu.','I wake up at 7.','我七點起床。']]],
+  ['です','Polite copula','禮貌連繫動詞','Works like is, am, or are. The plain form is だ.','類似「是」，常體是 だ。',[['これは本です。','Kore wa hon desu.','This is a book.','這是書。']]]
+];
+const GRAMMAR_FUNC = [
+  ['から','because / from','因為／從','After a sentence it means because. After a noun of place or time it means from.','接在句子後表示因為；接在地點或時間名詞後表示從。',[['寒いから、コートを着ます。','Samui kara, kōto o kimasu.','Because it is cold, I wear a coat.','因為冷，所以穿外套。']]],
+  ['でも','but / however','但是／可是','Starts a new sentence with contrast.','用在句首表示轉折。',[['雨です。でも、出かけます。','Ame desu. Demo, dekakemasu.','It is raining. But I will go out.','下雨。但我還是要出門。']]],
+  ['～たい','want to do','想做','Attach to the masu-stem to say you want to do something.','接在動詞ます形去ます後，表示想做某事。',[['日本に行きたいです。','Nihon ni ikitai desu.','I want to go to Japan.','我想去日本。']]],
+  ['～てください','please do','請做','Te-form plus kudasai makes a polite request.','動詞て形加ください，表示禮貌請求。',[['もう一度言ってください。','Mō ichido itte kudasai.','Please say it again.','請再說一次。']]]
+];
+const PASSAGES = [
+  {en_t:'Self Introduction', zh_t:'自我介紹', en_sub:'Name, nationality, and study', zh_sub:'名字、國籍與學習', sentences:[
+    ['はじめまして。','Hajimemashite.','Nice to meet you.','初次見面。'],['私はマイクです。','Watashi wa Maiku desu.','I am Mike.','我是Mike。'],['日本語を勉強しています。','Nihongo o benkyō shite imasu.','I am studying Japanese.','我正在學日語。'],['よろしくお願いします。','Yoroshiku onegai shimasu.','Nice to meet you.','請多多指教。']]},
+  {en_t:'My Daily Routine', zh_t:'我的一天', en_sub:'Simple daily activities', zh_sub:'簡單的日常活動', sentences:[
+    ['毎日六時に起きます。','Mainichi roku-ji ni okimasu.','I wake up every day at 6.','我每天六點起床。'],['朝ごはんを食べてから、学校に行きます。','Asagohan o tabete kara, gakkō ni ikimasu.','After breakfast, I go to school.','吃完早餐後，我去學校。'],['夜は本を読みます。','Yoru wa hon o yomimasu.','At night, I read a book.','晚上我讀書。']]},
+  {en_t:'Shopping Trip', zh_t:'購物之旅', en_sub:'A simple past-tense story', zh_sub:'簡單的過去式故事', sentences:[
+    ['昨日、デパートに行きました。','Kinō, depāto ni ikimashita.','Yesterday, I went to a department store.','昨天我去了百貨公司。'],['新しいかばんを買いました。','Atarashii kaban o kaimashita.','I bought a new bag.','我買了新包包。'],['少し高かったですが、とても綺麗です。','Sukoshi takakatta desu ga, totemo kirei desu.','It was a bit expensive, but very pretty.','有點貴，但很漂亮。']]}
+];
+
+let learned = {};
+try { learned = JSON.parse(localStorage.getItem('kana_learned') || '{}'); } catch(e) {}
+let currentLang = localStorage.getItem('kana_lang') || 'en';
+let currentTheme = localStorage.getItem('kana_theme') || 'dark';
+let currentPage = 'hiragana';
+let currentScript = 'hiragana';
+let currentVocabCat = 0;
+let currentGrammarTab = 'struct';
+let quizMode = 'kana-to-rom', qCorrect = 0, qWrong = 0, qCurrent = null, qAnswered = false;
+let fcScript = 'hiragana', fcDeck = [], fcIndex = 0, fcFlipped = false;
+
+function t(key) { return T[currentLang][key] || T.en[key] || key; }
+function allKana() {
+  return ROWS.flatMap(row => row.h.map((h, i) => h ? {h, k: row.k[i], r: row.r[i]} : null)).filter(Boolean);
+}
+function saveLearned() {
+  localStorage.setItem('kana_learned', JSON.stringify(learned));
+  updateProgress();
+}
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (T[currentLang][key]) el.innerHTML = T[currentLang][key];
+  });
+  document.documentElement.lang = currentLang === 'zh' ? 'zh-TW' : 'en';
+  document.body.setAttribute('data-lang', currentLang);
+  document.getElementById('vocab-tip').innerHTML = t('vocab_tip');
+}
+let jaVoice = null;
+function loadVoices() {
+  if (!('speechSynthesis' in window)) return;
+  jaVoice = speechSynthesis.getVoices().find(v => v.lang && v.lang.startsWith('ja')) || null;
+}
+if ('speechSynthesis' in window) {
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+function speak(text, e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  if (!('speechSynthesis' in window)) return alert(currentLang === 'zh' ? '此瀏覽器不支援語音合成。' : 'Speech synthesis is not supported in this browser.');
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'ja-JP';
+  u.rate = 0.85;
+  if (jaVoice) u.voice = jaVoice;
+  speechSynthesis.speak(u);
+}
+function splitMorae(hira) {
+  const small = 'ぁぃぅぇぉゃゅょゎァィゥェォャュョヮ';
+  const result = [];
+  for (const ch of hira) {
+    if (small.includes(ch) && result.length) result[result.length - 1] += ch;
+    else result.push(ch);
+  }
+  return result;
+}
+function pitchPattern(count, accent) {
+  return Array.from({length: count}, (_, i) => accent === 0 ? (i === 0 ? 'l' : 'h') : accent === 1 ? (i === 0 ? 'h' : 'l') : (i === 0 ? 'l' : i < accent ? 'h' : 'l'));
+}
+function renderPitchViz(hira, accent) {
+  const morae = splitMorae(hira);
+  const pat = pitchPattern(morae.length, Number(accent));
+  return `<span class="pitch-viz">${morae.map((m,i) => `<span class="pitch-mora"><span class="pitch-bar ${pat[i]}"></span><span class="pitch-kana">${m}</span></span>`).join('')}</span><span class="pitch-num">${accent}</span>`;
+}
+function hiraFor(char) {
+  const found = allKana().find(x => x.h === char || x.k === char);
+  return found ? found.h : char;
+}
+function getMeta(char, rom) {
+  const hira = hiraFor(char);
+  const ex = EXAMPLES[hira] || KATA_EXAMPLES[char] || [char, rom, 'practice word', '練習詞'];
+  const tip = STROKE_TIPS[hira] || STROKE_TIPS.default;
+  const pron = PRON[rom] || PRON.default;
+  return { ex, tip: tip[currentLang === 'zh' ? 1 : 0], pron: pron[currentLang === 'zh' ? 1 : 0] };
+}
+function renderKanaRows(script) {
+  const target = document.getElementById(script === 'hiragana' ? 'kana-rows-h' : 'kana-rows-k');
+  const key = script === 'hiragana' ? 'h' : 'k';
+  target.innerHTML = ROWS.map(row => `
+    <div class="row-group">
+      <div class="row-title">${row.label}</div>
+      <div class="kana-grid">
+        ${row[key].map((char, i) => char ? renderKanaCard(char, row.r[i], script) : `<div class="kana-card empty"></div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function renderKanaCard(char, rom, script) {
+  const id = `${script}:${char}`;
+  return `<div class="kana-card ${learned[id] ? 'learned' : ''}" data-id="${id}" onclick="showDetail('${script}','${char}','${rom}')">
+    <button class="audio-btn" onclick="speak('${char}',event)">▶</button>
+    <span class="kana-dot"></span>
+    <div class="kana-char">${char}</div>
+    <div class="kana-rom">${rom}</div>
+  </div>`;
+}
+function showDetail(script, char, rom) {
+  document.querySelectorAll('.kana-card').forEach(card => card.classList.remove('selected'));
+  document.querySelectorAll(`[data-id="${script}:${char}"]`).forEach(card => card.classList.add('selected'));
+  const panel = document.getElementById(script === 'hiragana' ? 'detail-panel-h' : 'detail-panel-k');
+  const id = `${script}:${char}`;
+  const meta = getMeta(char, rom);
+  panel.innerHTML = `
+    <div class="detail-inner">
+      <div class="detail-char-col"><div class="detail-big">${char}</div><div class="detail-rom">${rom}</div><button class="audio-btn" onclick="speak('${char}',event)">▶</button></div>
+      <div class="detail-info-col">
+        <div class="detail-section-title">${t('pron_label')}</div>
+        <p class="pronunciation-note">${meta.pron}</p>
+        <div class="detail-section-title">${t('example_label')}</div>
+        <div class="example-word"><div><div class="ex-jp">${meta.ex[0]}</div><div class="ex-rom">${meta.ex[1]}</div><div class="ex-mean">${currentLang === 'zh' ? meta.ex[3] : meta.ex[2]}</div></div><button class="audio-btn" onclick="speak('${meta.ex[0]}',event)">▶</button></div>
+      </div>
+      <div class="detail-stroke-col">
+        <div class="detail-section-title">${t('stroke_label')}</div>
+        <p class="stroke-tip">${meta.tip}</p>
+        <button class="mark-btn ${learned[id] ? 'marked' : ''}" onclick="toggleLearned('${id}')">${learned[id] ? t('learned_tag') : t('mark_learned')}</button>
+      </div>
+    </div>
+    <div class="close-detail" onclick="closeDetail('${script}')">${t('close_tag')}</div>`;
+  panel.classList.add('open');
+}
+function closeDetail(script) {
+  document.getElementById(script === 'hiragana' ? 'detail-panel-h' : 'detail-panel-k').classList.remove('open');
+  document.querySelectorAll('.kana-card').forEach(card => card.classList.remove('selected'));
+}
+function toggleLearned(id) {
+  learned[id] = !learned[id];
+  if (!learned[id]) delete learned[id];
+  saveLearned();
+  renderKanaRows('hiragana');
+  renderKanaRows('katakana');
+  renderChart();
+}
+function updateProgress() {
+  const hira = allKana().filter(x => learned[`hiragana:${x.h}`]).length;
+  const kata = allKana().filter(x => learned[`katakana:${x.k}`]).length;
+  const pct = Math.round(((hira + kata) / 92) * 100);
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  const bh = document.getElementById('badge-hira');
+  const bk = document.getElementById('badge-kata');
+  bh.textContent = `${hira}/46`;
+  bk.textContent = `${kata}/46`;
+  bh.classList.toggle('done', hira === 46);
+  bk.classList.toggle('done', kata === 46);
+}
+function setScript(script) {
+  currentScript = script;
+  document.querySelectorAll('.script-btn').forEach((btn, i) => btn.classList.toggle('active', (script === 'hiragana' && i === 0) || (script === 'katakana' && i === 1)));
+  goTo(script);
+}
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('kana_lang', lang);
+  document.querySelectorAll('.lang-btn').forEach((btn, i) => btn.classList.toggle('active', (lang === 'en' && i === 0) || (lang === 'zh' && i === 1)));
+  applyI18n();
+  renderDynamic();
+  updateTitle();
+}
+function toggleTheme() {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('kana_theme', currentTheme);
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('theme-btn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function goTo(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(item => {
+    if (item.getAttribute('onclick') === `goTo('${page}')`) item.classList.add('active');
+  });
+  document.getElementById('script-toggle').style.display = page === 'hiragana' || page === 'katakana' ? 'flex' : 'none';
+  if (page === 'hiragana' || page === 'katakana') currentScript = page;
+  document.querySelectorAll('.script-btn').forEach((btn, i) => btn.classList.toggle('active', (currentScript === 'hiragana' && i === 0) || (currentScript === 'katakana' && i === 1)));
+  updateTitle();
+  if (window.innerWidth <= 820) toggleSidebar();
+}
+function updateTitle() {
+  const titles = {
+    hiragana:['Hiragana 五十音','Learn the 46 basic hiragana characters','平假名 五十音','學習46個基本平假名'],
+    katakana:['Katakana 五十音','Learn the 46 basic katakana characters','片假名 五十音','學習46個基本片假名'],
+    dakuten:['Dakuten ゛゜','Voiced and semi-voiced sounds','濁音 ゛゜','濁音與半濁音'],
+    combos:['Combination Kana','Small や, ゆ, よ compounds','拗音','小寫 や、ゆ、よ 的組合音'],
+    pitch:['Pitch Accent','Japanese pitch accent basics','音調標記','日語音調入門'],
+    kanji:['Kanji Intro','How characters work in Japanese','漢字入門','認識日語漢字'],
+    vocab:['JLPT N5 Vocabulary','Core words for beginners','JLPT N5 單字','初學者核心單字'],
+    grammar:['JLPT N5 Grammar','Core sentence patterns','JLPT N5 文法','核心句型'],
+    passages:['N5 Reading Passages','Short beginner readings','N5 閱讀練習','初級短文閱讀'],
+    flashcards:['Flashcards','Review kana quickly','單字卡','快速複習假名'],
+    quiz:['Quiz','Test kana recognition','測驗','測試假名辨識'],
+    chart:['Full Chart','Hiragana and katakana side by side','完整表','平假名與片假名對照']
+  };
+  const x = titles[currentPage];
+  document.getElementById('page-title').textContent = currentLang === 'zh' ? x[2] : x[0];
+  document.getElementById('page-sub').textContent = currentLang === 'zh' ? x[3] : x[1];
+}
+function renderDakuten() {
+  document.getElementById('dakuten-content').innerHTML = `<div class="dakuten-grid">${DAKUTEN.map(x => `
+    <div class="dk-card" onclick="speak('${x[1]}')"><div class="dk-pair"><span class="dk-orig">${x[0]}</span><span class="dk-arrow">→</span><span class="dk-new">${x[1]}</span></div><div class="dk-rom">${x[2]}</div></div>`).join('')}</div>`;
+}
+function renderCombos() {
+  document.getElementById('combos-content').innerHTML = `<div class="combo-grid">${COMBOS.map(x => `
+    <div class="combo-card" onclick="speak('${x.c}')"><div class="combo-chars">${x.c}</div><div class="combo-rom">${x.r}</div></div>`).join('')}</div>`;
+}
+function renderPitch() {
+  document.getElementById('pitch-content').innerHTML = `
+    <div class="section-head"><h2>${currentLang === 'zh' ? '音調標記' : 'Pitch Accent'}</h2><span class="sub">0, 1, 2...</span></div>
+    <div class="pitch-section">
+      <h3>${currentLang === 'zh' ? '音高不是聲調' : 'Pitch is not tone'}</h3>
+      <p>${currentLang === 'zh' ? '日語的音調是高低變化，不像中文聲調那樣每個字固定升降。數字表示音高下降的位置。' : 'Japanese pitch accent is a high-low pattern. The number tells you where the pitch drops.'}</p>
+      <div class="pitch-type-grid">
+        <div class="pitch-type-card"><div class="pitch-type-name">${currentLang === 'zh' ? '平板型 0' : 'Heiban 0'}</div><p>${currentLang === 'zh' ? '第一拍低，之後升高且不下降。' : 'First mora low, then high without a drop.'}</p>${renderPitchViz('さかな',0)}</div>
+        <div class="pitch-type-card"><div class="pitch-type-name">${currentLang === 'zh' ? '頭高型 1' : 'Atamadaka 1'}</div><p>${currentLang === 'zh' ? '第一拍高，之後下降。' : 'First mora high, then drops.'}</p>${renderPitchViz('あめ',1)}</div>
+        <div class="pitch-type-card"><div class="pitch-type-name">${currentLang === 'zh' ? '中高型 2' : 'Nakadaka 2'}</div><p>${currentLang === 'zh' ? '中間某處下降。' : 'The drop happens in the middle.'}</p>${renderPitchViz('たまご',2)}</div>
+        <div class="pitch-type-card"><div class="pitch-type-name">${currentLang === 'zh' ? '尾高型' : 'Odaka'}</div><p>${currentLang === 'zh' ? '詞尾後才下降。' : 'The drop happens after the word.'}</p>${renderPitchViz('はな',2)}</div>
+      </div>
+    </div>`;
+}
+function renderKanji() {
+  document.getElementById('kanji-content').innerHTML = `
+    <div class="kanji-hero"><div class="kanji-hero-char">日本語</div><div class="topbar-sub">${currentLang === 'zh' ? '平假名、片假名、漢字一起構成日語書寫。' : 'Japanese writing combines hiragana, katakana, and kanji.'}</div></div>
+    <div class="kanji-card"><h3>${currentLang === 'zh' ? '漢字代表意義' : 'Kanji carry meaning'}</h3><p>${currentLang === 'zh' ? '漢字來自中文，但在日語中有自己的讀音與用法。每個漢字通常有音讀與訓讀。' : 'Kanji came from Chinese characters, but Japanese gives them its own readings and grammar. Many kanji have both Chinese-derived readings and native Japanese readings.'}</p>
+      <div class="kanji-examples">${[['日','にち / ひ','sun, day','太陽、日'],['本','ほん','book, origin','書、本源'],['人','じん / ひと','person','人'],['山','さん / やま','mountain','山'],['水','すい / みず','water','水']].map(x => `<div class="kanji-ex"><div class="kanji-ex-char">${x[0]}</div><div class="ex-rom">${x[1]}</div><div class="ex-mean">${currentLang === 'zh' ? x[3] : x[2]}</div></div>`).join('')}</div>
+    </div>
+    <div class="kanji-card"><h3>${currentLang === 'zh' ? '從常見字開始' : 'Start with common kanji'}</h3><p>${currentLang === 'zh' ? '不用一次學完全部漢字。先學高頻字，搭配單字一起記，會比單獨背字形更有效。' : 'You do not need to learn every kanji at once. Start with frequent kanji and learn them inside real words.'}</p></div>`;
+}
+function renderVocab() {
+  document.getElementById('vocab-tip').innerHTML = t('vocab_tip');
+  document.getElementById('vocab-cats').innerHTML = N5_VOCAB.map((cat, i) => `<button class="vocab-cat-btn ${i === currentVocabCat ? 'active' : ''}" onclick="setVocabCat(${i})">${currentLang === 'zh' ? cat.cat_zh : cat.cat_en}</button>`).join('');
+  const cat = N5_VOCAB[currentVocabCat];
+  document.getElementById('vocab-grid').innerHTML = cat.words.map(w => `
+    <div class="vocab-card">
+      <div class="vocab-kanji">${w[0]}</div>
+      <div class="vocab-hira">${w[1]} <button class="audio-btn" onclick="speak('${w[1]}',event)">▶</button></div>
+      <div style="margin-top:8px">${renderPitchViz(w[1], w[2])}</div>
+      <div class="vocab-meaning">${currentLang === 'zh' ? w[4] : w[3]}</div>
+    </div>`).join('');
+}
+function setVocabCat(i) {
+  currentVocabCat = i;
+  renderVocab();
+}
+function renderGrammar() {
+  document.getElementById('sov-intro-card').innerHTML = `<div class="sov-card"><h3>${currentLang === 'zh' ? '日語常見語序：主語 - 受詞 - 動詞' : 'Japanese often uses Subject - Object - Verb order'}</h3><div class="sov-grid"><div class="sov-lang"><div class="ex-rom">English</div><div>I eat sushi.</div></div><div class="sov-lang"><div class="ex-rom">日本語</div><div class="sov-sentence jp">私は寿司を食べます。</div></div></div></div>`;
+  document.querySelectorAll('.grammar-tab').forEach((btn, i) => btn.classList.toggle('active', (currentGrammarTab === 'struct' && i === 0) || (currentGrammarTab === 'func' && i === 1)));
+  const data = currentGrammarTab === 'struct' ? GRAMMAR_STRUCT : GRAMMAR_FUNC;
+  document.getElementById('grammar-list').innerHTML = data.map((g, i) => `
+    <div class="grammar-item ${i === 0 ? 'open' : ''}">
+      <div class="grammar-header" onclick="this.parentElement.classList.toggle('open')"><div class="grammar-pattern">${g[0]}</div><div class="grammar-title">${currentLang === 'zh' ? g[2] : g[1]}</div><div class="grammar-toggle">⌄</div></div>
+      <div class="grammar-body"><div class="grammar-desc">${currentLang === 'zh' ? g[4] : g[3]}</div>${g[5].map(ex => `<div class="grammar-ex"><div class="grammar-ex-jp">${ex[0]} <button class="audio-btn" onclick="speak('${ex[0]}',event)">▶</button></div><div class="grammar-ex-rom">${ex[1]}</div><div class="grammar-ex-trans">${currentLang === 'zh' ? ex[3] : ex[2]}</div></div>`).join('')}</div>
+    </div>`).join('');
+}
+function setGrammarTab(tab) {
+  currentGrammarTab = tab;
+  renderGrammar();
+}
+function renderPassages() {
+  document.getElementById('passages-content').innerHTML = PASSAGES.map((p, pi) => `
+    <div class="passage-card">
+      <div class="passage-header"><div><div class="passage-title">${currentLang === 'zh' ? p.zh_t : p.en_t}</div><div class="passage-subtitle">${currentLang === 'zh' ? p.zh_sub : p.en_sub}</div></div><button class="tiny-btn" onclick="togglePassage(${pi})">${currentLang === 'zh' ? '全部顯示' : 'Reveal all'}</button></div>
+      ${p.sentences.map(s => `<div class="passage-sentence" data-passage="${pi}" onclick="this.classList.toggle('revealed')"><div class="psent-jp"><span>${s[0]}</span><button class="audio-btn" onclick="speak('${s[0]}',event)">▶</button></div><div class="psent-trans"><div class="psent-rom">${s[1]}</div><div class="psent-translation">${currentLang === 'zh' ? s[3] : s[2]}</div></div></div>`).join('')}
+    </div>`).join('');
+}
+function togglePassage(i) {
+  const nodes = [...document.querySelectorAll(`[data-passage="${i}"]`)];
+  const reveal = nodes.some(n => !n.classList.contains('revealed'));
+  nodes.forEach(n => n.classList.toggle('revealed', reveal));
+}
+function makeDeck(script) {
+  const deck = allKana().flatMap(x => script === 'both' ? [{char:x.h,rom:x.r,script:'hiragana'}, {char:x.k,rom:x.r,script:'katakana'}] : [{char:script === 'hiragana' ? x.h : x.k, rom:x.r, script}]);
+  return deck.sort(() => Math.random() - 0.5);
+}
+function setFcScript(script, btn) {
+  fcScript = script;
+  document.querySelectorAll('#page-flashcards .mode-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  fcDeck = makeDeck(script);
+  fcIndex = 0;
+  fcFlipped = false;
+  renderFc();
+}
+function renderFc() {
+  if (!fcDeck.length) fcDeck = makeDeck(fcScript);
+  const card = fcDeck[fcIndex % fcDeck.length];
+  const meta = getMeta(card.char, card.rom);
+  document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
+  document.getElementById('fc-front').textContent = card.char;
+  document.getElementById('fc-back-rom').textContent = card.rom;
+  document.getElementById('fc-back-word').textContent = meta.ex[0];
+  document.getElementById('fc-back-mean').textContent = currentLang === 'zh' ? meta.ex[3] : meta.ex[2];
+  document.getElementById('fc-counter').textContent = currentLang === 'zh' ? `第 ${fcIndex + 1} 張，共 ${fcDeck.length}` : `Card ${fcIndex + 1} of ${fcDeck.length}`;
+  document.getElementById('fc-prog').style.width = `${((fcIndex + 1) / fcDeck.length) * 100}%`;
+}
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  renderFc();
+}
+function fcAnswer(good) {
+  const card = fcDeck[fcIndex % fcDeck.length];
+  if (good) {
+    const learnId = `${card.script}:${card.char}`;
+    learned[learnId] = true;
+    saveLearned();
+    renderKanaRows('hiragana');
+    renderKanaRows('katakana');
+    renderChart();
+  }
+  fcIndex = (fcIndex + 1) % fcDeck.length;
+  fcFlipped = false;
+  renderFc();
+}
+function setQuizMode(mode, btn) {
+  quizMode = mode;
+  document.querySelectorAll('#page-quiz .mode-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  qCorrect = 0; qWrong = 0;
+  updateQuizStats();
+  nextQ();
+}
+function randomItems(arr, n) {
+  return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+}
+function nextQ() {
+  qAnswered = false;
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('q-feedback').textContent = '';
+  const deck = allKana();
+  const base = deck[Math.floor(Math.random() * deck.length)];
+  const mode = quizMode === 'both-scripts' ? (Math.random() > 0.5 ? 'kana-to-rom' : 'rom-to-kana') : quizMode;
+  const script = Math.random() > 0.5 ? 'h' : 'k';
+  qCurrent = { base, mode, script };
+  const qChar = document.getElementById('q-char');
+  qChar.classList.toggle('romaji-mode', mode === 'rom-to-kana');
+  qChar.textContent = mode === 'kana-to-rom' ? base[script] : base.r;
+  document.getElementById('q-label').textContent = mode === 'kana-to-rom' ? t('q_prompt_k2r') : t('q_prompt_r2k');
+  const wrong = randomItems(deck.filter(x => x.r !== base.r), 3);
+  const choices = randomItems([base, ...wrong], 4);
+  document.getElementById('choices').innerHTML = choices.map(x => {
+    const label = mode === 'kana-to-rom' ? x.r : x[script];
+    return `<button class="choice-btn ${mode === 'rom-to-kana' ? 'jp-choice' : ''}" onclick="answerQ('${label.replace(/'/g, "\\'")}')">${label}</button>`;
+  }).join('');
+}
+function answerQ(choice) {
+  if (qAnswered) return;
+  qAnswered = true;
+  const right = qCurrent.mode === 'kana-to-rom' ? qCurrent.base.r : qCurrent.base[qCurrent.script];
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === right) btn.classList.add('correct');
+    if (btn.textContent === choice && choice !== right) btn.classList.add('wrong');
+  });
+  if (choice === right) {
+    qCorrect++;
+    document.getElementById('q-feedback').textContent = t('correct_msg');
+  } else {
+    qWrong++;
+    document.getElementById('q-feedback').textContent = `${t('wrong_was')} ${right}`;
+  }
+  updateQuizStats();
+  document.getElementById('quiz-next').style.display = 'block';
+}
+function updateQuizStats() {
+  const total = qCorrect + qWrong;
+  document.getElementById('qs-correct').textContent = qCorrect;
+  document.getElementById('qs-wrong').textContent = qWrong;
+  document.getElementById('qs-pct').textContent = total ? Math.round(qCorrect / total * 100) + '%' : '-';
+}
+function renderChart() {
+  document.getElementById('chart-table').innerHTML = `
+    <thead><tr><th>Row</th><th>A</th><th>I</th><th>U</th><th>E</th><th>O</th></tr></thead>
+    <tbody>${ROWS.map(row => `<tr><th>${row.label}</th>${[0,1,2,3,4].map(i => {
+      const h = row.h[i], k = row.k[i], r = row.r[i];
+      if (!h) return '<td></td>';
+      const learnedBoth = learned[`hiragana:${h}`] && learned[`katakana:${k}`];
+      return `<td><div class="chart-cell ${learnedBoth ? 'learned' : ''}" onclick="goTo('${currentScript}');showDetail('${currentScript}','${currentScript === 'hiragana' ? h : k}','${r}')"><span class="cc">${h} ${k}</span><span class="cr">${r}</span></div></td>`;
+    }).join('')}</tr>`).join('')}</tbody>`;
+}
+function renderDynamic() {
+  renderKanaRows('hiragana');
+  renderKanaRows('katakana');
+  renderDakuten();
+  renderCombos();
+  renderPitch();
+  renderKanji();
+  renderVocab();
+  renderGrammar();
+  renderPassages();
+  renderChart();
+  renderFc();
+}
+function init() {
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  document.getElementById('theme-btn').textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  document.querySelectorAll('.lang-btn').forEach((btn, i) => btn.classList.toggle('active', (currentLang === 'en' && i === 0) || (currentLang === 'zh' && i === 1)));
+  applyI18n();
+  renderDynamic();
+  updateProgress();
+  updateTitle();
+  nextQ();
+}
+init();
+</script>
+</body>
+</html>
