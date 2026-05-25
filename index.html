@@ -4525,10 +4525,230 @@ const N3_VOCAB = parseVocabSource(N3_VOCAB_SOURCE);
 const VOCAB_LEVELS = { N5: N5_VOCAB, N4: N4_VOCAB, N3: N3_VOCAB };
 const GRAMMAR_STRUCT = parseGrammarSource(GRAMMAR_STRUCT_SOURCE);
 const GRAMMAR_FUNC = parseGrammarSource(GRAMMAR_FUNC_SOURCE);
-const N4_GRAMMAR_STRUCT_SOURCE = ``;
-const N4_GRAMMAR_FUNC_SOURCE = ``;
-const N3_GRAMMAR_STRUCT_SOURCE = ``;
-const N3_GRAMMAR_FUNC_SOURCE = ``;
+const N4_GRAMMAR_STRUCT_SOURCE = `
+# N4 句型 | N4 Sentence Patterns
+〜てから	Vて + から	…之後	after doing…	朝ごはんを食べてから、学校へ行きます。	I go to school after eating breakfast.	吃完早餐之後，去學校。
+〜たり〜たりする	Vた形 + り + Vた形 + り する	又…又…／之類的	do things like … and …	休みの日は本を読んだり、テレビを見たりします。	On my days off, I do things like read books and watch TV.	假日的時候，看看書、看看電視之類的。
+〜前に	V辞書形／Nの + 前に	…之前	before…	寝る前に、歯を磨きます。	I brush my teeth before going to bed.	睡覺之前刷牙。
+〜後で	Vた形／Nの + 後で	…之後	after…	仕事が終わった後で、飲みに行きましょう。	Let's go for a drink after work is over.	工作結束之後，去喝一杯吧。
+〜ながら	Vます形 + ながら	一邊…一邊…	while doing…	音楽を聴きながら、勉強します。	I study while listening to music.	一邊聽音樂，一邊讀書。
+〜し	普通形 + し	又…（列舉理由）	and also… / … so…	この店は安いし、おいしいです。	This restaurant is cheap and delicious.	這家店又便宜又好吃。
+〜ので	普通形 + ので	因為…（客觀原因）	because… (objective)	雨が降ったので、試合が中止になりました。	The game was cancelled because it rained.	因為下雨，比賽取消了。
+〜から	普通形 + から	因為…（主觀原因）	because… (subjective)	寒いから、窓を閉めてください。	Please close the window because it's cold.	因為冷，請關窗。
+〜なら	普通形 + なら	如果…（承接話題）	if … (given that)	安いなら、買います。	If it's cheap, I'll buy it.	如果便宜的話，我就買。
+〜たら	Vた形 + たら	如果…／…之後	if / when…	東京に着いたら、連絡してください。	Please contact me when you arrive in Tokyo.	到了東京之後，請聯絡我。
+〜ば	Vば形 / いAければ	如果…	if…	天気がよければ、出かけます。	If the weather is good, I will go out.	天氣好的話，就出門。
+〜と	普通形 + と	一…就…／如果…	whenever… / if…	春になると、花が咲きます。	When spring comes, flowers bloom.	一到春天，花就開。
+〜ても	Vて形 / いAくて + も	即使…也…	even if…	雨が降っても、行きます。	I will go even if it rains.	即使下雨也去。
+〜のに	普通形 + のに	明明…卻…	even though…	たくさん勉強したのに、合格できませんでした。	I failed even though I studied a lot.	明明讀了很多書，卻沒及格。
+〜ために（目的）	V辞書形／Nの + ために	為了…	for the purpose of…	日本へ留学するために、お金を貯めています。	I am saving money in order to study abroad in Japan.	為了去日本留學，正在存錢。
+〜ように	V辞書形／Vない形 + ように	為了…（狀態目標）	so that…	速く泳げるように、毎日練習しています。	I practice every day so that I can swim fast.	為了能游得快，每天都在練習。
+〜すぎる	Vます形／いA語幹／なA語幹 + すぎる	太…	too much…	食べすぎて、お腹が痛いです。	I ate too much and have a stomachache.	吃太多，肚子痛。
+〜やすい	Vます形 + やすい	容易…	easy to…	このペンは書きやすいです。	This pen is easy to write with.	這支筆很好寫。
+〜にくい	Vます形 + にくい	難…	hard to…	この肉は固くて食べにくいです。	This meat is tough and hard to eat.	這肉很硬，很難吃。
+〜始める	Vます形 + 始める	開始…	start doing…	先月、日本語を習い始めました。	I started learning Japanese last month.	上個月開始學日語。
+〜終わる	Vます形 + 終わる	…完	finish doing…	レポートを書き終わりました。	I finished writing the report.	報告寫完了。
+〜続ける	Vます形 + 続ける	繼續…	continue doing…	疲れたけど、走り続けました。	I was tired but continued running.	雖然累了，但繼續跑。
+〜出す	Vます形 + 出す	…起來（突然）	suddenly start… / begin to…	赤ちゃんが急に泣き出しました。	The baby suddenly started crying.	嬰兒突然哭了起來。
+〜方	Vます形 + 方	…的方法	way of doing…	漢字の書き方を教えてください。	Please teach me how to write kanji.	請教我漢字的寫法。
+〜という	N + という + N	叫做…的	called…	これは「すし」という食べ物です。	This is a food called "sushi".	這是一種叫做「壽司」的食物。
+〜と思う	普通形 + と思う	（我）覺得…	I think that…	明日は晴れると思います。	I think it will be sunny tomorrow.	我覺得明天會放晴。
+〜と言う	普通形 + と言う	說…	say that…	彼は来週帰ると言いました。	He said he would come back next week.	他說他下週回來。
+〜かどうか	普通形 + かどうか	是否…	whether or not…	明日、暇かどうかわかりません。	I don't know whether I'm free tomorrow.	不知道明天是否有空。
+〜でしょう	普通形 + でしょう	…吧（推測）	probably…	明日はたぶん雨でしょう。	It will probably rain tomorrow.	明天大概會下雨吧。
+〜だろう	普通形 + だろう	…吧（推測・普通體）	probably… (plain)	彼も来るだろう。	He will probably come too.	他也會來吧。
+〜かもしれない	普通形 + かもしれない	也許…	might…	明日は寒いかもしれません。	It might be cold tomorrow.	明天也許會冷。
+〜はずだ	普通形 + はずだ	應該…（有把握）	should be… / it is expected that…	彼はもう着いたはずです。	He should have arrived already.	他應該已經到了。
+〜つもりだ	V辞書形／Vない形 + つもりだ	打算…	intend to…	来年、結婚するつもりです。	I intend to get married next year.	打算明年結婚。
+〜予定だ	V辞書形／N + の + 予定だ	預計…	plan to…	社長は明日、大阪へ行く予定です。	The company president plans to go to Osaka tomorrow.	社長預計明天去大阪。
+〜ことにする	V辞書形／Vない形 + ことにする	決定…（自己決定）	decide to…	タバコをやめることにしました。	I decided to quit smoking.	我決定戒菸。
+〜ことになる	V辞書形／Vない形 + ことになる	決定…（團體決定／結果）	it is decided that… / end up…	来月、転勤することになりました。	It has been decided that I will be transferred next month.	決定下個月調職。
+〜ようにする	V辞書形／Vない形 + ようにする	設法…／努力做到…	make an effort to…	毎日、運動するようにしています。	I try to exercise every day.	我努力做到每天運動。
+〜ようになる	V辞書形／Vない形 + ようになる	變得會…／變得不會…	come to be able to… / reach the point where…	日本語が少し話せるようになりました。	I have become able to speak a little Japanese.	變得會說一點日語了。
+〜てほしい	Vて形 + ほしい	希望…（別人做）	want (someone) to…	もっと早く来てほしいです。	I want you to come earlier.	希望你更早一點來。
+〜てもらう	Vて形 + もらう	請／讓…做（感恩）	have someone do…	友達に引っ越しを手伝ってもらいました。	I had a friend help me move.	請朋友幫忙搬家了。
+〜てくれる	Vて形 + くれる	…為我做（我方受益）	(someone) does for me/us	母が弁当を作ってくれました。	My mother made a bento for me.	媽媽為我做了便當。
+〜てあげる	Vて形 + あげる	幫…做	do (a favor) for someone	妹に英語を教えてあげました。	I taught English to my younger sister.	我教妹妹英文。
+〜てしまう	Vて形 + しまう	…完了／不小心（遺憾）	finish doing / regrettably…	大切な書類をなくしてしまいました。	I (regrettably) lost an important document.	不小心把重要的文件弄丟了。
+〜ておく	Vて形 + おく	預先…	do in advance	お客さんが来る前に、部屋を掃除しておきます。	I will clean the room before the guests come.	在客人來之前，先打掃好房間。
+〜てみる	Vて形 + みる	試著…	try doing…	この服を着てみてもいいですか。	May I try on these clothes?	我可以試穿這件衣服嗎？
+〜てある	Vて形 + ある	…著（人為狀態）	something is intentionally left…	壁にポスターが貼ってあります。	A poster is put up on the wall (intentionally).	牆上貼著海報。
+〜ていく	Vて形 + いく	…去／…下去	do and go / continue into the future	これからも日本語を勉強していきます。	I will continue studying Japanese from now on.	今後也會繼續學日語下去。
+〜てくる	Vて形 + くる	…來／…起來	do and come / have begun to…	だんだん暖かくなってきました。	It has gradually become warmer.	漸漸變暖了。
+〜ところだ	V辞書形／Vている／Vた形 + ところだ	正要做／正在做／剛做	just about to / in the middle of / just did	今、出かけるところです。	I'm just about to go out.	正要出門。
+〜ばかりだ	Vた形 + ばかりだ	剛…	just did…	さっき昼ごはんを食べたばかりです。	I just ate lunch a little while ago.	剛剛才吃過午飯。
+`;
+const N4_GRAMMAR_FUNC_SOURCE = `
+# N4 功能語彙 | N4 Functional Vocabulary
+〜なければならない	Vない形 + なければならない	必須…	must do…	明日までにレポートを出さなければなりません。	I must submit the report by tomorrow.	必須在明天之前交出報告。
+〜なくてもいい	Vない形 + なくてもいい	不必…	don't have to…	今日は残業しなくてもいいです。	You don't have to work overtime today.	今天不必加班。
+〜てはいけない	Vて形 + はいけない	不可以…	must not…	ここでタバコを吸ってはいけません。	You must not smoke here.	不可以在這裡抽菸。
+〜てもいい	Vて形 + もいい	可以…	may do…	写真を撮ってもいいですか。	May I take a photo?	可以拍照嗎？
+〜たほうがいい	Vた形 / Vない形 + ほうがいい	還是…比較好	had better…	早く寝たほうがいいですよ。	You'd better go to bed early.	還是早點睡比較好。
+〜ないほうがいい	Vない形 + ほうがいい	還是不要…比較好	should not…	そんなことを言わないほうがいい。	You should not say such a thing.	那種話還是不要說比較好。
+〜ことがある	V辞書形／Vない形 + ことがある	有時…	there are times when…	朝ごはんを食べないことがあります。	There are times when I don't eat breakfast.	有時候不吃早餐。
+〜ことができる	V辞書形 + ことができる	能夠…	can do…	彼はピアノを弾くことができます。	He can play the piano.	他會彈鋼琴。
+〜たことがある	Vた形 + ことがある	曾經…過	have the experience of…	日本へ行ったことがあります。	I have been to Japan.	我去過日本。
+〜にする	V辞書形／N + にする	決定…／選擇…	decide on… / choose…	私はコーヒーにします。	I'll have coffee.	我選咖啡。
+〜になる	N / なA語幹 / いAく + になる	變成…	become…	もうすぐ春になります。	It will be spring soon.	馬上就要春天了。
+〜くする／〜にする	いAく / なAに + する	使…變成…	make something…	部屋を明るくしました。	I made the room bright.	讓房間變亮了。
+〜そうだ（伝聞）	普通形 + そうだ	聽說…	I heard that…	天気予報によると、明日は雨が降るそうです。	According to the weather forecast, I heard it will rain tomorrow.	聽說據天氣預報明天會下雨。
+〜そうだ（様態）	Vます形／いA語幹／なA語幹 + そうだ	看起來…	looks like…	このケーキはおいしそうです。	This cake looks delicious.	這個蛋糕看起來很好吃。
+〜ようだ	普通形 + ようだ	好像…（感覺／比喻）	seems like… / like…	あの人は何か悩みがあるようだ。	That person seems to have some worries.	那個人好像有什麼煩惱。
+〜みたいだ	普通形 + みたいだ	好像…（口語）	like… (casual)	あの雲は猫みたいだ。	That cloud looks like a cat.	那朵雲像貓一樣。
+〜らしい	普通形 + らしい	聽說…／典型…	I heard… / typical of…	彼は来月転勤するらしい。	I heard he will be transferred next month.	聽說他下個月要調職。
+〜でしょう／だろう	普通形 + でしょう／だろう	…吧（推測／確認）	probably… / right?	これ、おいしいでしょう？	This is delicious, isn't it?	這個很好吃吧？
+〜ましょう	Vます形 + ましょう	…吧（提議）	let's…	一緒に帰りましょう。	Let's go home together.	一起回家吧。
+〜ませんか	Vます形 + ませんか	要不要…？	won't you…?	映画を見に行きませんか。	Won't you go see a movie?	要不要去看電影？
+〜ましょうか	Vます形 + ましょうか	要我幫你…嗎？	shall I…?	窓を閉めましょうか。	Shall I close the window?	要我幫你關窗嗎？
+〜たい	Vます形 + たい	想…	want to…	新しい携帯が買いたいです。	I want to buy a new mobile phone.	想買新手機。
+〜たがる	Vます形 + たがる	（第三人稱）想…	want to… (3rd person)	子供は外で遊びたがります。	Children want to play outside.	小孩想在外面玩。
+〜ようと思う	V意向形 + と思う	打算…	think of doing…	来年、留学しようと思います。	I'm thinking of studying abroad next year.	我打算明年去留學。
+〜つもりはない	V辞書形／Vない形 + つもりはない	不打算…	have no intention of…	彼と話すつもりはありません。	I have no intention of talking to him.	不打算和他說話。
+〜はずがない	普通形 + はずがない	不可能…	cannot be…	そんなことがあるはずがない。	That cannot be true.	不可能有那種事。
+〜わけだ	普通形 + わけだ	也就是說…／難怪…	so that means… / no wonder…	彼は日本に10年住んでいたから、日本語が上手なわけだ。	He lived in Japan for 10 years, so no wonder his Japanese is good.	他在日本住了十年，難怪日語好。
+〜わけがない	普通形 + わけがない	不可能…	there is no way…	あの人がそんなことを言うわけがない。	There is no way that person would say such a thing.	那個人不可能說那種話。
+〜ものだ	普通形 + ものだ	本來就該…／以前常…	should… / used to…	人の悪口を言わないものだ。	One should not speak ill of others.	本來就不該說別人壞話。
+〜ことだ	V辞書形／Vない形 + ことだ	重要的是…	it's important to…	試験に合格するためには、毎日勉強することだ。	To pass the exam, it's important to study every day.	為了通過考試，重要的是每天讀書。
+〜ほど〜ない	普通形 + ほど + Vない形	不如…	not as … as…	今年の冬は去年ほど寒くない。	This winter is not as cold as last year.	今年冬天不如去年冷。
+〜だけでなく	普通形 + だけでなく	不僅…	not only…	彼は英語だけでなく、中国語も話せます。	He speaks not only English but also Chinese.	他不只會英語，也會中文。
+〜しか〜ない	普通形 + しか + Vない形	只有…	only…	財布に10円しかありません。	I have only 10 yen in my wallet.	錢包裡只有十圓。
+〜ばかり	普通形 + ばかり	盡是…／一直…	nothing but… / always…	彼はいつも文句ばかり言っている。	He is always complaining.	他老是發牢騷。
+〜くらい	普通形 + くらい	大約…／…到…程度	about… / so … that…	歩けないくらい疲れました。	I was so tired I couldn't walk.	累到走不動的程度。
+〜でも	N + でも	…之類的／即使…	or something / even…	お茶でも飲みませんか。	Won't you have some tea or something?	要不要喝杯茶之類的？
+〜とか〜とか	N / 普通形 + とか	N之類的	things like…	休みの日は洗濯とか掃除とかをします。	On my days off, I do things like laundry and cleaning.	假日會做洗衣服、打掃之類的事。
+〜かな	普通形 + かな	…吧（自言自語／疑問）	I wonder…	明日、天気はいいかな。	I wonder if the weather will be good tomorrow.	明天天氣會好嗎？
+〜かしら	普通形 + かしら	…吧（女性用）	I wonder… (female)	この服、私に似合うかしら。	I wonder if these clothes suit me.	這件衣服適合我嗎？
+〜なあ	普通形 + なあ	…啊（感嘆）	How…! / What a…!	きれいだなあ。	How beautiful!	真漂亮啊！
+〜だろうか	普通形 + だろうか	會…嗎？（疑問）	I wonder…	彼はもう着いただろうか。	I wonder if he has already arrived.	他已經到了嗎？
+〜にいく	Vます形 + にいく	去…	go to do…	昼ごはんを食べに行きましょう。	Let's go eat lunch.	去吃午飯吧。
+〜にくる	Vます形 + にくる	來…	come to do…	母が手伝いに来てくれました。	My mother came to help me.	媽媽來幫忙了。
+〜にかえる	Vます形 + にかえる	回去…	return to do…	傘を取りに家に帰りました。	I went home to get an umbrella.	回家拿傘。
+〜ように言う	普通形 + ように言う	叫／吩咐…	tell (someone) to…	先生はもっと勉強するように言いました。	The teacher told me to study more.	老師叫我多用功一點。
+〜てくれませんか	Vて形 + くれませんか	可以幫我…嗎？	could you do…?	塩を取ってくれませんか。	Could you pass me the salt?	可以幫我拿一下鹽嗎？
+〜ていただけませんか	Vて形 + いただけませんか	能否請您…？（敬語）	could you please…? (polite)	この書類をチェックしていただけませんか。	Could you please check this document?	能否請您過目一下這份文件？
+〜てくださいませんか	Vて形 + くださいませんか	可以請您…嗎？	would you please…?	少々お待ちくださいませんか。	Would you please wait a moment?	可以請您稍等一下嗎？
+〜てもかまわない	Vて形 + もかまわない	…也沒關係	it's okay if…	窓を開けてもかまいませんか。	Is it okay if I open the window?	開窗也沒關係嗎？
+`;
+const N3_GRAMMAR_STRUCT_SOURCE = `
+# N3 句型 | N3 Sentence Patterns
+〜たところで	Vた形 + ところで	即使…也…	even if…	今さら謝ったところで、もう遅い。	Even if you apologize now, it's too late.	事到如今道歉，也已經太遲了。
+〜うちに	V辞書形／Vない形／いA / なAな + うちに	在…之內／趁著…	while… / before…	若いうちに、いろいろなことを経験したい。	I want to experience various things while I'm young.	趁年輕，想多體驗各種事。
+〜最中に	Vている／Nの + 最中に	正在…的時候	in the middle of…	会議の最中に、電話がかかってきた。	I got a phone call in the middle of the meeting.	開會開到一半，電話打來了。
+〜にあたって	V辞書形／N + にあたって	在…之際	on the occasion of…	開会にあたって、一言ご挨拶申し上げます。	I would like to say a few words on the occasion of the opening.	在開會之際，說幾句問候語。
+〜に際して	V辞書形／N + に際して	當…之際	upon… / when…	非常時に際して、冷静に行動してください。	Please act calmly in an emergency.	緊急狀況時，請冷靜行動。
+〜において	N + において	在…（場所／場面）	in / at…	会議は東京において行われます。	The conference will be held in Tokyo.	會議在東京舉行。
+〜にわたって	N + にわたって	長達…／遍及…	over… / throughout…	彼は10年にわたって、この研究を続けている。	He has continued this research for over ten years.	他長達十年持續這項研究。
+〜を通じて	N + を通じて	透過…（整個期間／手段）	through… / throughout…	一年を通じて、この地域は暖かい。	This region is warm throughout the year.	一整年這個地區都很溫暖。
+〜にしたがって	V辞書形／N + にしたがって	隨著…	as… / following…	年を取るにしたがって、体力が落ちる。	As you get older, your physical strength declines.	隨著年齡增長，體力衰退。
+〜につれて	V辞書形／N + につれて	伴隨著…	as… / along with…	時間が経つにつれて、悲しみも薄れてきた。	As time passed, the sadness faded.	隨著時間流逝，悲傷也淡了。
+〜とともに	V辞書形／N + とともに	和…一起／隨著…	together with… / as…	彼は仲間とともに、新しい会社を設立した。	He established a new company together with his colleagues.	他和夥伴一起創立了新公司。
+〜ば〜ほど	Vば形 / いAければ + V辞書形／いA + ほど	越…越…	the more… the more…	考えれば考えるほど、わからなくなる。	The more I think, the more confused I get.	越想越搞不懂。
+〜ほど	V辞書形／N + ほど	…得令人…	to the extent that…	涙が出るほど感動した。	I was moved to the point of tears.	感動到眼淚都流出來了。
+〜一方だ	V辞書形 + 一方だ	一直…（單向發展）	more and more…	日本語を勉強する人は増える一方だ。	The number of people studying Japanese just keeps increasing.	學日語的人數不斷增加。
+〜一方で	V辞書形／普通形 + 一方で	另一方面…	on the other hand…	この仕事は給料が高い一方で、残業も多い。	This job pays well, but on the other hand, there is a lot of overtime.	這份工作薪水高，但另一方面加班也多。
+〜反面	普通形 + 反面	另一方面（相反評價）	on the other hand…	便利な反面、危険も伴う。	It's convenient, but on the other hand, it involves risks.	方便的同時，也伴隨著危險。
+〜にもかかわらず	普通形 + にもかかわらず	儘管…卻…	despite…	悪天候にもかかわらず、多くの人が集まった。	Many people gathered despite the bad weather.	儘管天氣不好，還是來了很多人。
+〜くせに	普通形 + くせに	明明…卻…（責備）	even though… (blame)	知っているくせに、教えてくれない。	Even though he knows, he won't tell me.	明明知道卻不告訴我。
+〜ものの	普通形 + ものの	雖然…但是…	although…	謝ったものの、許してもらえなかった。	I apologized, but I wasn't forgiven.	雖然道歉了，卻沒被原諒。
+〜とはいえ	普通形 + とはいえ	雖說…但是…	although… / having said that…	春とはいえ、まだ風が冷たい。	Although it's spring, the wind is still cold.	雖說是春天，風還是很冷。
+〜からといって	普通形 + からといって	雖說…也不…	just because… doesn't mean…	お金があるからといって、幸せとは限らない。	Just because you have money doesn't mean you're happy.	雖說有錢，也不一定幸福。
+〜としても	普通形 + としても	就算…也…	even if…	今から急いだとしても、間に合わないだろう。	Even if we hurry now, we probably won't make it.	就算現在趕去，也來不及吧。
+〜にしても	普通形 + にしても	就算…也…	even if… / no matter…	忙しいにしても、電話くらいできるはずだ。	Even if you're busy, you should at least be able to make a phone call.	就算忙，也應該能打個電話。
+〜たとえ〜ても	たとえ + Vて形 + も	即使…也…	even if…	たとえ失敗しても、気にしない。	Even if I fail, I won't mind.	即使失敗，我也不在意。
+〜にかかわらず	V辞書形／Vない形 + にかかわらず	不論…都…	regardless of…	この店は曜日にかかわらず、いつも込んでいる。	This shop is always crowded regardless of the day of the week.	這家店不論星期幾，總是人很多。
+〜にもとづいて	N + にもとづいて	根據…	based on…	計画にもとづいて、作業を進める。	We proceed based on the plan.	根據計畫進行作業。
+〜に基づいて	N + に基づいて	基於…	based on…	法律に基づいて、罰せられる。	Punishment is given based on the law.	依法受罰。
+〜をもとに	N + をもとに	以…為基礎	based on…	実話をもとにした映画を見た。	I watched a movie based on a true story.	看了一部根據真實故事改編的電影。
+〜に沿って	N + に沿って	沿著…／按照…	along / in accordance with…	この線に沿って、紙を切ってください。	Please cut the paper along this line.	請沿著這條線剪紙。
+〜に対して	N + に対して	對…／相對於…	towards / in contrast to…	先生に対して、失礼なことを言ってはいけない。	You mustn't say rude things to the teacher.	對老師不能說失禮的話。
+〜について	N + について	關於…	about / concerning…	日本の文化について、調べている。	I'm researching about Japanese culture.	在調查關於日本文化的事。
+〜に関して	N + に関して	有關…	regarding…	環境問題に関して、意見を交換した。	We exchanged opinions regarding environmental issues.	就環境問題交換了意見。
+〜に加えて	N + に加えて	加上…	in addition to…	大雨に加えて、風も強くなってきた。	In addition to the heavy rain, the wind has also become strong.	除了大雨之外，風也變大了。
+〜はもちろん	N + はもちろん	…不用說，…也…	not to mention… / let alone…	彼は英語はもちろん、フランス語も話せる。	He can speak French, not to mention English.	英語不用說，法語他也會。
+〜ばかりか	普通形 + ばかりか	不僅…而且…	not only… but also…	彼は漢字が読めないばかりか、ひらがなも書けない。	Not only can he not read kanji, but he can't even write hiragana.	他不但不會讀漢字，連平假名也不會寫。
+〜どころか	普通形 + どころか	別說…就連…	far from…	風邪が治るどころか、ひどくなった。	Far from getting better, my cold got worse.	別說感冒好了，反而更嚴重了。
+〜はともかく	N + はともかく	姑且不論…	leaving aside…	見た目はともかく、味はとてもいい。	Appearance aside, the taste is very good.	外觀姑且不論，味道很好。
+〜を問わず	N + を問わず	不論…	regardless of…	この会社は経験を問わず、やる気のある人を募集している。	This company is recruiting motivated people regardless of experience.	這家公司不論經驗，招募有幹勁的人。
+〜から見ると	普通形 + から見ると	從…來看	from the viewpoint of…	親から見ると、子供はいつまでも子供だ。	From a parent's perspective, a child is always a child.	從父母的角度來看，小孩永遠是小孩。
+〜から言うと	普通形 + から言うと	從…來說	speaking from…	私の経験から言うと、それは難しい。	Speaking from my experience, that is difficult.	從我的經驗來說，那很難。
+〜からすると	普通形 + からすると	就…而言	judging from…	あの言い方からすると、彼は怒っているようだ。	Judging from the way he spoke, he seems angry.	從那種說話口氣來看，他好像在生氣。
+〜に違いない	普通形 + に違いない	一定是…	must be…	あの人は犯人に違いない。	That person must be the culprit.	那個人一定是犯人。
+〜に決まっている	普通形 + に決まっている	一定是…（強烈確信）	it's certain that…	そんなの嘘に決まっている。	That's obviously a lie.	那肯定是謊言。
+〜わけではない	普通形 + わけではない	並不是…	it doesn't mean that…	彼の言うことがいつも正しいわけではない。	It doesn't mean that what he says is always right.	他說的並不見得總是正確的。
+〜とは限らない	普通形 + とは限らない	不一定…	not necessarily…	高いものが必ずしも良いとは限らない。	Expensive things are not necessarily good.	貴的東西不一定好。
+〜ざるを得ない	Vない形（去掉ない） + ざるを得ない	不得不…	cannot help but…	その事実を受け入れざるを得なかった。	I couldn't help but accept that fact.	不得不接受那個事實。
+〜ないではいられない	Vない形 + ではいられない	忍不住…	can't help but…	この映画を見ると、誰でも感動しないではいられない。	Anyone who watches this movie can't help but be moved.	看這部電影，任誰都會忍不住感動。
+〜ないことはない	Vない形 + ことはない	不是不…（有可能性）	it's not impossible…	やれば、できないことはない。	If you try, it's not impossible to do.	如果去做，也不是做不到。
+〜ないこともない	Vない形 + こともない	也不是不…	it's not that… not…	彼の気持ちもわからないこともない。	It's not that I don't understand his feelings.	他的心情我也不是不能理解。
+〜かねない	Vます形 + かねない	可能…（壞事）	might / could possibly…	そんなことをすると、けがをしかねない。	You could get injured if you do that.	做那種事可能會受傷。
+〜恐れがある	V辞書形／Nの + 恐れがある	恐怕會…	there is a risk that…	この薬は副作用の恐れがある。	This medicine may have side effects.	這個藥恐怕有副作用。
+〜に過ぎない	普通形 + に過ぎない	只不過是…	just / nothing more than…	私は一社員に過ぎません。	I'm just an employee.	我不過是一名員工罷了。
+〜にほかならない	N / 普通形の + にほかならない	正是…	nothing but…	成功の秘訣は努力にほかならない。	The secret of success is nothing but effort.	成功的秘訣不外乎努力。
+〜として	N + として	作為…	as…	趣味として、書道を習っている。	I'm learning calligraphy as a hobby.	作為興趣，在學書法。
+〜において（正式）	N + において	在…方面／於…	in / at… (formal)	日本語において、敬語は難しい。	In Japanese, keigo is difficult.	在日語方面，敬語很難。
+〜にかけては	N + にかけては	論…的話	when it comes to…	料理にかけては、彼女にかなう人はいない。	When it comes to cooking, no one can beat her.	論料理的話，沒人比得過她。
+〜に比べて	N + に比べて	與…相比	compared to…	今年の夏は去年に比べて暑い。	This summer is hot compared to last year.	與去年相比，今年夏天熱。
+〜にも増して	N + にも増して	比…更…	even more than…	今日は昨日にも増して寒い。	Today is even colder than yesterday.	今天比昨天更冷。
+〜以上（は）	V辞書形／Vた形 + 以上（は）	既然…就…	since / now that…	約束した以上、守るべきだ。	Since you promised, you should keep it.	既然約好了，就該遵守。
+〜上で	Vた形／Nの + 上で	在…之後／為了…	after… / for the purpose of…	内容を確認した上で、サインしてください。	Please sign after confirming the contents.	確認內容之後再簽名。
+`;
+const N3_GRAMMAR_FUNC_SOURCE = `
+# N3 功能語彙 | N3 Functional Vocabulary
+〜ようがない	Vます形 + ようがない	無從…	there is no way to…	住所がわからないので、連絡しようがない。	I have no way to contact him because I don't know his address.	不知道地址，無從聯絡。
+〜得る／〜得ない	Vます形 + 得る／得ない	有可能…／不可能…	can / cannot possibly…	そんなことはあり得ない。	That cannot possibly happen.	那種事不可能發生。
+〜かねる	Vます形 + かねる	難以…（心理上）	difficult to… / cannot…	その提案には賛成しかねます。	I find it difficult to agree to that proposal.	那個提案我很難贊成。
+〜がたい	Vます形 + がたい	難以…（幾乎不可能）	hard to…	彼の行動は理解しがたい。	His behavior is hard to understand.	他的行為難以理解。
+〜きる	Vます形 + きる	…完／徹底…	do completely…	一気に走りきった。	I ran all the way without stopping.	一口氣跑完了。
+〜ぬく	Vます形 + ぬく	堅持…到底	do through to the end…	彼は最後まで戦いぬいた。	He fought through to the end.	他奮戰到了最後。
+〜こなす	Vます形 + こなす	熟練地…	do skillfully…	彼女はどんな服も着こなす。	She wears any outfit stylishly.	她不管什麼衣服都穿得很有型。
+〜っぱなし	Vます形 + っぱなし	…著不管／一直…	leave something in a state…	テレビをつけっぱなしで、寝てしまった。	I fell asleep with the TV left on.	電視開著沒關就睡著了。
+〜おそれがある	V辞書形／Nの + おそれがある	恐怕會…	there is a fear that…	台風が上陸する恐れがある。	There is a risk that the typhoon will make landfall.	颱風恐怕會登陸。
+〜ものがある	普通形 + ものがある	確實有…之感	there is something…	彼の作品には人を引きつけるものがある。	There is something about his works that attracts people.	他的作品確實有吸引人的地方。
+〜気味	Vます形／N + 気味	稍微…／有…傾向	tend to feel…	最近、疲れ気味です。	I've been feeling a bit tired lately.	最近有點疲倦的感覺。
+〜げ	いA語幹／なA語幹 + げ	…的樣子	appears…	彼女は悲しげな顔をしている。	She has a sad look on her face.	她一臉悲傷的樣子。
+〜っぽい	Vます形／N + っぽい	容易…／有…傾向	-ish / tends to…	彼は怒りっぽい性格だ。	He has a quick-tempered personality.	他是容易生氣的性格。
+〜向き	N + 向き	適合…	suitable for…	この映画は子供向きではない。	This movie is not suitable for children.	這部電影不適合小孩。
+〜向け	N + 向け	以…為對象	intended for…	これは外国人向けの日本語教材です。	This is a Japanese textbook intended for foreigners.	這是給外國人用的日語教材。
+〜だらけ	N + だらけ	滿是…（負面）	full of…	部屋がほこりだらけだ。	The room is full of dust.	房間滿是灰塵。
+〜まみれ	N + まみれ	沾滿…（汙物）	covered in…	子供が泥まみれになって遊んでいる。	The children are playing covered in mud.	孩子玩得滿身泥巴。
+〜ずくめ	N + ずくめ	清一色…／全是…	entirely… / nothing but…	今日はいいことずくめの一日だった。	Today was a day of nothing but good things.	今天是好事連連的一天。
+〜かけ	Vます形 + かけ	做一半…	half-done / in the middle of…	机の上に飲みかけのコーヒーがある。	There is a half-drunk cup of coffee on the desk.	桌上有杯喝到一半的咖啡。
+〜中	Vます形／N + 中	正在…中	in the middle of…	ただいま準備中です。	We are currently in the middle of preparations.	現在準備中。
+〜際	Nの / V辞書形・Vた形 + 際	…之際	on the occasion of…	お降りの際は、お足元にご注意ください。	Please watch your step when getting off.	下車時請注意腳下。
+〜ついでに	V辞書形／Vた形／Nの + ついでに	順便…	taking the opportunity to…	買い物のついでに、図書館に寄った。	I dropped by the library while I was out shopping.	買東西順便去了圖書館。
+〜がてら	Vます形／N + がてら	順便…（一舉兩得）	while… / on the occasion of…	散歩がてら、コンビニに行ってくる。	I'll go to the convenience store while taking a walk.	散步順便去便利商店。
+〜かたわら	V辞書形／Nの + かたわら	一邊…一邊…（同時並行）	while / besides…	彼は仕事のかたわら、小説を書いている。	He writes novels besides working.	他工作之餘還寫小說。
+〜に先立って	V辞書形／N + に先立って	在…之前	prior to…	出発に先立って、注意事項を説明します。	I will explain the precautions prior to departure.	出發之前，先說明注意事項。
+〜末に	Vた形／Nの + 末に	…之後的結果	after… / as a result of…	考えた末に、大学院に進むことにした。	After much thought, I decided to go to graduate school.	考慮再三之後，決定讀研究所。
+〜あげく	Vた形／Nの + あげく	…的最後（負面結果）	in the end / after…	迷ったあげく、何も買わなかった。	After hesitating, I ended up buying nothing.	猶豫到最後，什麼也沒買。
+〜た末	Vた形 + 末	經過…之後	after… (result)	努力した末、ついに成功した。	After making efforts, I finally succeeded.	經過努力之後，終於成功了。
+〜た結果	Vた形 + 結果	…的結果	as a result of…	話し合った結果、計画を変更することになった。	As a result of the discussion, we decided to change the plan.	討論的結果，決定變更計畫。
+〜次第	Vます形 + 次第	一…就…	as soon as…	準備ができ次第、出発します。	We will leave as soon as preparations are complete.	準備一好就出發。
+〜次第だ	普通形 + 次第だ	全憑…／原因在於…	it depends on… / the reason is…	成功するかどうかは、努力次第だ。	Whether you succeed depends on your effort.	成功與否全憑努力。
+〜て以来	Vて形 + 以来	自從…以來	since…	日本に来て以来、一度も風邪を引いていない。	I haven't caught a cold once since I came to Japan.	來到日本之後，一次感冒也沒得過。
+〜以来	N / Vて形 + 以来	…以來	since…	あれ以来、彼に会っていない。	I haven't seen him since then.	從那之後就沒見過他。
+〜たきり	Vた形 + きり	…之後就再也沒…	since… and never…	彼は出かけたきり、帰ってこない。	He went out and hasn't come back since.	他出去之後就再也沒回來。
+〜にとって	N + にとって	對…來說	for / to someone…	私にとって、家族が一番大切です。	Family is the most important thing to me.	對我來說，家人最重要。
+〜によって	N + によって	根據…／因…而異／由…	by / depending on…	人によって考え方が違う。	Ways of thinking differ depending on the person.	想法因人而異。
+〜による	N + による	由於…／由…造成的	due to / by…	台風による被害が大きかった。	The damage caused by the typhoon was great.	颱風造成的災情很大。
+〜を通して	N + を通して	透過…	through…	経験を通して、多くのことを学んだ。	I learned a lot through experience.	透過經驗學到了很多。
+〜をめぐって	N + をめぐって	圍繞…	concerning / surrounding…	新しい法律をめぐって、国会で議論が行われた。	There was debate in the Diet surrounding the new law.	圍繞新法律，在國會進行了討論。
+〜を中心に	N + を中心に	以…為中心	centered on…	地球は太陽を中心に回っている。	The earth revolves around the sun.	地球以太陽為中心旋轉。
+〜をはじめ	N + をはじめ	以…為首	starting with…	社長をはじめ、社員全員が参加した。	The company president and all employees participated.	以社長為首，全體員工都參加了。
+〜を除いて	N + を除いて	除了…之外	except…	月曜日を除いて、毎日営業しています。	We are open every day except Monday.	除星期一之外，每天營業。
+〜抜きで	N + 抜きで	免去…／沒有…	without…	今日はアルコール抜きの飲み会にしよう。	Let's have a drinking party without alcohol today.	今天來辦沒有酒的聚會吧。
+〜抜きにして	N + 抜きにして	撇開…	leaving out…	冗談抜きにして、真面目に考えてください。	Joking aside, please think about it seriously.	撇開玩笑，請認真思考。
+〜に限らず	N + に限らず	不限於…	not limited to…	この番組は子供に限らず、大人にも人気がある。	This program is popular not only with children but also with adults.	這個節目不只小孩，大人也喜歡。
+〜のみならず	普通形 + のみならず	不僅…	not only…	彼は英語のみならず、中国語も話せる。	He speaks not only English but also Chinese.	他不只會英語，中文也會。
+〜ばかりでなく	普通形 + ばかりでなく	不只是…	not only…	彼は頭がいいばかりでなく、スポーツも得意だ。	He is not only smart but also good at sports.	他不只頭腦好，運動也很擅長。
+〜にとどまらず	V辞書形／N + にとどまらず	不只停留於…	not limited to…	彼の影響は国内にとどまらず、海外にも広がった。	His influence spread not just domestically but also overseas.	他的影響不只停留於國內，更擴展到海外。
+〜はもとより	N + はもとより	…自不用說	not only… but also…	彼は漢字はもとより、ひらがなも読めない。	He can't even read hiragana, let alone kanji.	他漢字不用說，連平假名都不會讀。
+〜から〜にかけて	N + から N + にかけて	從…到…（時空連續）	from… to…	昨夜から今朝にかけて、大雨が降った。	It rained heavily from last night to this morning.	從昨晚到今天早上下了大雨。
+〜にわたって（機能）	N + にわたって	長達…（期間）	over… (duration)	会議は三時間にわたって行われた。	The meeting was held over three hours.	會議長達三小時。
+〜を通じて（機能）	N + を通じて	整個…期間	throughout…	四季を通じて、観光客が訪れる。	Tourists visit throughout the four seasons.	一整年都有觀光客造訪。
+〜にかけて	N + にかけて	在…方面（能力）	when it comes to…	この地域にかけて、桜の名所がたくさんある。	Covering this area, there are many famous cherry blossom spots.	這個地區一帶，有很多賞櫻名勝。
+`;
 const GRAMMAR_LEVELS = {
   N5: { struct: GRAMMAR_STRUCT, func: GRAMMAR_FUNC },
   N4: { struct: parseGrammarSource(N4_GRAMMAR_STRUCT_SOURCE), func: parseGrammarSource(N4_GRAMMAR_FUNC_SOURCE) },
